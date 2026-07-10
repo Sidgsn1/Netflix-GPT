@@ -3,15 +3,14 @@ import Header from "./Header"
 import { checkValidData } from "../utils/validate"
 import { createUserWithEmailAndPassword,signInWithEmailAndPassword,updateProfile} from "firebase/auth";
 import { auth } from "../utils/firebase"; 
-import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { LOGIN_BG, USER_AVATAR } from "../utils/constants";
 
 const Login=()=>{
     const [isSignInForm,setIsSignInForm] = useState(true)
     const [errorMessage,setErrorMessage] = useState(null)
 
-    const navigate=useNavigate()
     const dispatch=useDispatch()
 
     const name=useRef(null)
@@ -36,19 +35,15 @@ const Login=()=>{
                 .then((userCredential) => {
 
                 const user = userCredential.user;
-                // navigate("/browse")
                 //after user is created i will update 
                 updateProfile(user, {
-                    displayName: name.current.value, photoURL: "https://i.pinimg.com/736x/fd/a7/9a/fda79a9471d43a39d2d8eabc8720f8aa.jpg"
+                    displayName: name.current.value, photoURL: USER_AVATAR
                 }).then(() => {
                     // Profile updated!
                     //now update in the store also
                     const {uid,email,displayName,photoURL} = auth.currentUser;
                     //will update my store by dispatching the action
                     dispatch(addUser({uid: uid, email: email, displayName: displayName,photoURL: photoURL}))
-                    //now navigate
-                    //if it is a successfull sign up then i will redirect from here
-                    navigate("/browse")
                 }).catch((error) => {
                     // An error occurred
                     setErrorMessage(error.message)
@@ -67,7 +62,6 @@ const Login=()=>{
                 // Signed in 
                 const user = userCredential.user;
                 console.log("sign in completed",user)
-                navigate("/browse")
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -82,7 +76,7 @@ const Login=()=>{
         <div className="relative h-screen overflow-hidden">
             <Header />
             <div className="relative">
-                <img className="w-full h-full object-cover" src="https://assets.nflxext.com/ffe/siteui/vlv3/2f42605e-e786-4a06-8612-ebc67c55ba6c/web/IN-en-20260629-TRIFECTA-perspective_76b17e8c-cff9-4c65-9938-08ca5029be6b_small.jpg" alt="background-img"></img>
+                <img className="w-full h-full object-cover" src={LOGIN_BG} alt="background-img"></img>
                 <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.8),rgba(0,0,0,0.45),rgba(0,0,0,0.8))]"></div>
             </div>
             <div className="absolute inset-0 flex items-center justify-center px-4">
