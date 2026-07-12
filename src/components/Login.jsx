@@ -74,7 +74,9 @@ const Login=()=>{
     }
     return(
         <div className="relative h-screen overflow-hidden">
+            
             <Header />
+
             <div className="relative">
                 <img className="w-full h-full object-cover" src={LOGIN_BG} alt="background-img"></img>
                 <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.8),rgba(0,0,0,0.45),rgba(0,0,0,0.8))]"></div>

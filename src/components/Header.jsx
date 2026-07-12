@@ -47,8 +47,8 @@ const Header = () => {
     return ()=> unsubscribe();
   },[])
   return (
-    <div className="absolute top-0 left-0 z-20 w-full bg-gradient-to-b from-black/80 to-transparent">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 md:px-10 lg:px-12">
+    <div className="absolute top-0 left-0  z-20 w-full bg-gradient-to-b from-black/80 to-transparent">
+      <div className="flex items-center justify-between px-4 py-5 sm:px-6 md:px-10 lg:px-12">
         <img className="w-28 sm:w-32 md:w-36 lg:w-40" src={LOGO} alt="netflix-logo"></img>
 
         {/* Right side buttons baad me */}
