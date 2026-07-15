@@ -5,9 +5,9 @@ import VideoTitle from "./VideoTitle"
 const MainContainer = () => {
   const movies = useSelector(store=> store.movies?.nowPlayingMovies)
 
-  if(!movies) return; //as i dont want the runtime error null[0] will give error so we did "Early Return"
+  if(!movies) return null; //as i dont want the runtime error null[0] will give error so we did "Early Return"
   //I want one main movie 
-  const mainMovie = movies[6]
+  const mainMovie = movies[10]
 
   const{original_title, overview, id} = mainMovie
 
