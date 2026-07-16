@@ -7,6 +7,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice"
 import { LOGO } from "../utils/constants";
+import { LogOut,ChevronDown,Sparkles } from "lucide-react";
 
 const Header = () => {
   const navigate=useNavigate()
@@ -52,9 +53,29 @@ const Header = () => {
         <img className="w-28 sm:w-32 md:w-36 lg:w-40" src={LOGO} alt="netflix-logo"></img>
 
         {/* Right side buttons baad me */}
-        {user && <div className="flex gap-4">
-          <img className="w-12" src={user?.photoURL} alt="user-profile"></img>
-          <button className="cursor-pointer text-white" onClick={handleSignOut}>Sign Out</button>
+        {user && <div className="flex items-center justify-between">
+          <button className="w-48 h-12 relative group flex items-center justify-center rounded-xl mr-10 p-[2px] bg-gradient-to-r from-purple-800 via-red-600 to-blue-800 cursor-pointer">
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-800 via-red-600 to-blue-800 blur-md opacity-0 transition-all duration-300 group-hover:opacity-60 -z-10">
+            </div>
+            <div className="relative w-full h-full flex items-center justify-center gap-2 rounded-xl bg-black">
+              <Sparkles
+                size={22}
+                className="text-violet-500 fill-violet-500"
+              />
+              <span className="text-white font-medium text-xl">
+                GPT Search
+              </span>
+            </div>
+          </button>
+          <div className="flex items-center gap-1 ">
+            <div className="border-2 border-white/20 rounded-md p-1">
+              <img className="w-12 rounded-md" src={user?.photoURL} alt="user-profile"></img>
+            </div>
+            <ChevronDown  strokeWidth={1.5} color="white"/>
+          </div>
+          <button className="cursor-pointer text-white py-4 px-4 border-white flex gap-2 font-semibold" onClick={handleSignOut}>
+            <LogOut color="red"/>
+            Sign Out</button>
         </div>}
       </div>
     </div>
