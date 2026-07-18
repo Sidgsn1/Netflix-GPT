@@ -8,10 +8,12 @@ import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice"
 import { LOGO } from "../utils/constants";
 import { LogOut,ChevronDown,Sparkles } from "lucide-react";
+import { toggleGptSearchView } from "../utils/gptSlice";
 
 const Header = () => {
   const navigate=useNavigate()
   const user=useSelector(store=>store.user)
+  const showGptSearch = useSelector(store=>store.gpt.showGptSearch)
   const dispatch=useDispatch();
 
   const handleSignOut=()=>{
@@ -47,6 +49,11 @@ const Header = () => {
     //This will be called when component unmounts and this will unsubscribe my onAuthStateChanged 
     return ()=> unsubscribe();
   },[])
+
+  const handleGptSearchClick = ()=>{
+    //Toggle GPT Search 
+    dispatch(toggleGptSearchView())
+  }
   return (
     <div className="absolute top-0 left-0  z-20 w-full bg-gradient-to-b from-black/80 to-transparent">
       <div className="flex items-center justify-between px-4 py-5 sm:px-6 md:px-10 lg:px-12">
@@ -54,16 +61,17 @@ const Header = () => {
 
         {/* Right side buttons baad me */}
         {user && <div className="flex items-center justify-between">
-          <button className="w-48 h-12 relative group flex items-center justify-center rounded-xl mr-10 p-[2px] bg-gradient-to-r from-purple-800 via-red-600 to-blue-800 cursor-pointer">
+          <button className="w-48 h-12 relative group flex items-center justify-center rounded-md mr-10 p-[2px] bg-gradient-to-r from-purple-800 via-red-600 to-blue-800 cursor-pointer"
+            onClick={handleGptSearchClick}>
             <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-800 via-red-600 to-blue-800 blur-md opacity-0 transition-all duration-300 group-hover:opacity-60 -z-10">
             </div>
-            <div className="relative w-full h-full flex items-center justify-center gap-2 rounded-xl bg-black">
+            <div className="relative w-full h-full flex items-center justify-center gap-2 rounded-md bg-black">
               <Sparkles
                 size={22}
                 className="text-violet-500 fill-violet-500"
               />
               <span className="text-white font-medium text-xl">
-                GPT Search
+                {showGptSearch ? "Homepage" : "GPT Search"}
               </span>
             </div>
           </button>
