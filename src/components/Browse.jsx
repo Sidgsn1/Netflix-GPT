@@ -7,6 +7,7 @@ import GptSearch from "./GptSearch"
 import Header from "./Header"
 import MainContainer from "./MainContainer"
 import SecondaryContainer from "./SecondaryContainer"
+import useMovieGenres from "../hooks/useMovieGenres"
 
 const Browse=()=>{
 
@@ -16,6 +17,7 @@ const Browse=()=>{
     usePopularMovies()
     useTopRatedMovies()
     useUpcomingMovies()
+    useMovieGenres()
 
     return(
         <div className="bg-black">
