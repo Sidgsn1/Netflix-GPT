@@ -8,6 +8,7 @@ import Header from "./Header"
 import MainContainer from "./MainContainer"
 import SecondaryContainer from "./SecondaryContainer"
 import useMovieGenres from "../hooks/useMovieGenres"
+import useWatchlist from "../hooks/useWatchlist"
 
 const Browse=()=>{
 
@@ -18,6 +19,7 @@ const Browse=()=>{
     useTopRatedMovies()
     useUpcomingMovies()
     useMovieGenres()
+    useWatchlist()
 
     return(
         <div className="bg-black">

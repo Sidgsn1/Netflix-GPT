@@ -1,13 +1,45 @@
-import { CirclePlus, Star } from "lucide-react"
+import { CircleCheck, CirclePlus, Heart, Star, Trash2 } from "lucide-react"
 import { IMG_CDN_URL } from "../utils/constants"
 import NoPosterExist from "../assets/images/noPoster.png"
-
+import { useDispatch, useSelector } from "react-redux";
+import { addMovie } from "../utils/watchlistSlice";
+import { addMovieToWatchlist } from "../utils/firestore";
+import { removeMovie } from "../utils/watchlistSlice";
+import { removeMovieFromWatchlist } from "../utils/firestore";
 
 const GptMovieCard = ({title,movieData,genres}) => {
 
-    const {poster_path, vote_average, release_date, genre_ids} = movieData
-    const movieGenres = genre_ids.slice(0,2).map((id)=>genres[id]).join(", ")
+    const dispatch = useDispatch()
+    const uid = useSelector(store => store.user?.uid)
+    const watchlistMovies = useSelector(store=>store.watchlist.movies)
 
+    const isAdded = watchlistMovies.some(movie=>movie.movieId === movieData.id)
+
+    if (!movieData || !genres) return null;
+    const {poster_path, vote_average, release_date, genre_ids} = movieData
+    const movieGenres = genre_ids?.slice(0,2)?.map((id)=>genres[id])?.join(", ")||"unknown"
+
+    const handleAddToWatchlist = async()=>{
+        if (!uid) {
+        console.log("User not logged in");
+        return;
+        }
+        console.log("UID:", uid);
+        console.log("Movie:", movieData);
+
+        const savedMovie = await addMovieToWatchlist(uid, movieData);
+        dispatch(addMovie(savedMovie));
+    }
+    
+    const handleRemoveFromWatchlist = async () => {
+
+        if (!uid) return;
+
+        await removeMovieFromWatchlist(uid, movieData.id);
+
+        dispatch(removeMovie(movieData.id));
+    }
+    
   return (
     <div>
         <div className="group relative rounded-xl p-[1.5px]  transition-all duration-500 ease-out cursor-pointer hover:bg-gradient-to-r hover:from-[#7C3AED] hover:via-[#A855F7] hover:to-[#FBBF24] hover:shadow-[0_0_20px_rgba(168,85,247,.35)]">
@@ -24,18 +56,26 @@ const GptMovieCard = ({title,movieData,genres}) => {
                         duration-300
                         group-hover:opacity-100">
                     </div>
+                    {isAdded && <div className="absolute top-2 left-2 flex items-center gap-2 transition-all duration-200 bg-black/40 px-3 py-2 rounded-2xl">
+                        <Heart size={18} color="red" fill="red"/>
+                        <span className="text-sm tracking-wider">In Watchlist</span>
+                    </div>}
                     <button className="w-full absolute bottom-3 flex justify-center cursor-pointer
                         opacity-0
                         translate-y-3
                         transition-all
                         duration-300
                         group-hover:opacity-100
-                        group-hover:translate-y-0">
-                        <div className="relative rounded-xl p-[1.5px] bg-gradient-to-r from-[#7C3AED] via-[#A855F7] to-[#FBBF24]">
-                            <div className="bg-black rounded-xl flex gap-2 px-4 py-3 text-sm">
+                        group-hover:translate-y-0" onClick={isAdded ? handleRemoveFromWatchlist : handleAddToWatchlist}>
+                        <div className="relative text-white rounded-xl p-[1.5px] bg-gradient-to-r from-[#7C3AED] via-[#A855F7] to-[#FBBF24]">
+                            {isAdded ? (<div className="bg-black rounded-xl flex gap-5 px-4 py-3 text-sm">
+                                <Trash2 size={20} color="red"/>
+                                <span className="font-semibold tracking-wider text-red-500">Remove</span>
+                            </div>) 
+                            :(<div className="bg-black rounded-xl flex gap-2 px-4 py-3 text-sm">
                                 <CirclePlus size={20}/>
                                 <span className="font-semibold tracking-wide">Add To Watchlist</span>
-                            </div>
+                            </div>)}
                         </div>
                     </button>
                 </div>
