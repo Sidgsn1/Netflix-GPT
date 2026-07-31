@@ -1,4 +1,4 @@
-import { CircleCheck, CirclePlus, Heart, Star, Trash2 } from "lucide-react"
+import {  CirclePlus, Heart, Star, Trash2 } from "lucide-react"
 import { IMG_CDN_URL } from "../utils/constants"
 import NoPosterExist from "../assets/images/noPoster.png"
 import { useDispatch, useSelector } from "react-redux";
@@ -56,9 +56,9 @@ const GptMovieCard = ({title,movieData,genres}) => {
                         duration-300
                         group-hover:opacity-100">
                     </div>
-                    {isAdded && <div className="absolute top-2 left-2 flex items-center gap-2 transition-all duration-200 bg-black/40 px-3 py-2 rounded-2xl">
+                    {isAdded && <div className="absolute top-2 left-2 flex items-center gap-2 transition-all duration-200 bg-black/60 px-3 py-2 rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                         <Heart size={18} color="red" fill="red"/>
-                        <span className="text-sm tracking-wider">In Watchlist</span>
+                        <span className="text-sm tracking-wider text-white">In Watchlist</span>
                     </div>}
                     <button className="w-full absolute bottom-3 flex justify-center cursor-pointer
                         opacity-0

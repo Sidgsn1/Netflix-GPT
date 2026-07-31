@@ -32,9 +32,11 @@ const Login=()=>{
         }
     }
 
-    const handleButtonClick=()=>{
+    const handleButtonClick= async ()=>{
+
         //validate the form
         const msg=checkValidData(isSignInForm,name.current?.value,email.current.value,password.current.value)
+
         setErrorMessage(msg)
 
         if(msg) return; //if msg is there means something was not valid (msg is not null)
@@ -42,46 +44,55 @@ const Login=()=>{
         //Sign In and Sign Up Logic
         if(!isSignInForm){
             //sign Up logic
-            createUserWithEmailAndPassword(auth,email.current.value,password.current.value)
-                .then((userCredential) => {
+            try {
+                const fullName = name.current.value;
+                const emailValue = email.current.value;
+                const passwordValue = password.current.value;
 
-                const user = userCredential.user;
-                //after user is created i will update 
-                updateProfile(user, {
-                    displayName: name.current.value, photoURL: USER_AVATAR
-                }).then(() => {
-                    // Profile updated!
-                    //now update in the store also
-                    const {uid,email,displayName,photoURL} = auth.currentUser;
-                    //will update my store by dispatching the action
-                    dispatch(addUser({uid: uid, email: email, displayName: displayName,photoURL: photoURL}))
-                }).catch((error) => {
-                    // An error occurred
-                    setErrorMessage(error.message)
+                const userCredential = await createUserWithEmailAndPassword(
+                    auth,
+                    emailValue,
+                    passwordValue
+                );
+
+                await updateProfile(userCredential.user, {
+                    displayName: fullName,
+                    photoURL: USER_AVATAR,
                 });
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                setErrorMessage(errorCode + "-" + errorMessage)
-            });
+
+                console.log("SUCCESS");
+
+                dispatch(addUser({
+                        uid: userCredential.user.uid,
+                        email: userCredential.user.email,
+                        displayName: fullName,
+                        photoURL: USER_AVATAR,
+                        })
+                    );
+
+                console.log("After Calling");
+
+            } catch (error) {
+
+                console.error("🔥 Signup Error");
+                console.error(error);
+
+            }
         }
         else{
             //sign In logic
-            signInWithEmailAndPassword(auth, email.current.value, password.current.value)
-            .then((userCredential) => {
-                // Signed in 
-                const user = userCredential.user;
-                console.log("sign in completed",user)
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                setErrorMessage(errorCode + "-" + errorMessage)
-            });
-        }
+            try {
+                await signInWithEmailAndPassword(
+                    auth,
+                    email.current.value,
+                    password.current.value
+                );
+            } catch (error) {
 
-        
+                setErrorMessage(error.code + " - " + error.message);
+
+            }
+        }
     }
     return(
         <div className="relative h-screen overflow-hidden">

@@ -7,7 +7,7 @@ const MainContainer = () => {
 
   if(!movies) return null; //as i dont want the runtime error null[0] will give error so we did "Early Return"
   //I want one main movie 
-  const mainMovie = movies[10]
+  const mainMovie = movies[0]
 
   const{original_title, overview, id} = mainMovie
 

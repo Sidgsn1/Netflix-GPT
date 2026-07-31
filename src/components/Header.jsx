@@ -2,10 +2,10 @@ import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { useState } from "react";
+// import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { addUser, removeUser } from "../utils/userSlice"
+// import { addUser, removeUser } from "../utils/userSlice"
 import { LOGO } from "../utils/constants";
 import { LogOut,ChevronDown,Sparkles, Heart } from "lucide-react";
 import { toggleGptSearchView } from "../utils/gptSlice";
@@ -28,35 +28,39 @@ const Header = () => {
     });
   }
 
-  useEffect(()=>{
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in
-        const {uid,email,displayName,photoURL} = user;
-        //will update my store by dispatching the action
-        dispatch(addUser({uid: uid, email: email, displayName: displayName,photoURL: photoURL}))
-        //now as soon as the user sign's in ,I want him to redirect to the browse page(how to do that-> by using hook useNavigate)
+  // useEffect(()=>{
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       // User is signed in
+  //       const {uid,email,displayName,photoURL} = user;
+  //       //will update my store by dispatching the action
+  //       dispatch(addUser({uid: uid, email: email, displayName: displayName,photoURL: photoURL}))
+  //       //now as soon as the user sign's in ,I want him to redirect to the browse page(how to do that-> by using hook useNavigate)
         
-        //always navigate to the /browse route when signed in
-        navigate("/browse")
-      } else {
-        // User is signed out
-        dispatch(removeUser())
-        //if my user is sign's out then I want him to navigate to the main page(login page)
+  //       //always navigate to the /browse route when signed in
+  //       navigate("/browse")
+  //     } else {
+  //       // User is signed out
+  //       dispatch(removeUser())
+  //       //if my user is sign's out then I want him to navigate to the main page(login page)
         
-        //always stay at Login page when not loggedin
-        navigate("/")
-      }
-    });
+  //       //always stay at Login page when not loggedin
+  //       navigate("/")
+  //     }
+  //   });
 
-    //This will be called when component unmounts and this will unsubscribe my onAuthStateChanged 
-    return ()=> unsubscribe();
-  },[])
+  //   //This will be called when component unmounts and this will unsubscribe my onAuthStateChanged 
+  //   return ()=> unsubscribe();
+  // },[])
 
   const handleGptSearchClick = ()=>{
     //Toggle GPT Search 
     dispatch(toggleGptSearchView())
   }
+  const handleWatchlistClick = () => {
+    setShowProfileMenu(false);   // dropdown band
+    navigate("/watchlist");      // page change
+};
   return (
     <div className="absolute top-0 left-0  z-20 w-full bg-gradient-to-b from-black/80 to-transparent">
       <div className="flex items-center justify-between px-4 py-5 sm:px-6 md:px-10 lg:px-12">
@@ -94,7 +98,7 @@ const Header = () => {
                     <h6 className="text-gray-400 text-sm">{user?.email}</h6>
                   </div>
                 </div>
-                <div className="gap-5 border-amber-50/25 border-t-1 py-6">
+                <button className="w-full border-amber-50/25 border-t-1 py-6 " onClick={handleWatchlistClick}>
                   <div className="flex items-center justify-between">
                     <div className="flex gap-5">
                       <Heart fill="red" color="red"/>
@@ -102,7 +106,7 @@ const Header = () => {
                     </div>
                     <div className="px-3 py-1 rounded-xl bg-zinc-800 tracking-wide flex items-center justify-center text-sm font-light">{watchlistMovies.length}</div>
                   </div>
-                </div>
+                </button>
               </div>
             }
           </div>
