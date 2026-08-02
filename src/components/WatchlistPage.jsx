@@ -8,7 +8,7 @@ import WatchlistGrid from "./WatchlistGrid"
 const WatchlistPage = ()=>{
     const showGptSearch = useSelector(store=>store.gpt.showGptSearch)
     return(
-        <div className="min-h-screen bg-black">
+        <div className="min-h-screen bg-[#09090B]">
 
             <Header />
             {

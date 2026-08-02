@@ -1,15 +1,22 @@
-import {
-  Filter,
-  LayoutGrid,
-  List,
-  ChevronDown,
-} from "lucide-react";
+import {Filter,LayoutGrid,List,ChevronDown,} from "lucide-react";
 import { useState } from "react";
-
+import { useDispatch, useSelector } from "react-redux";
+import {setSortBy,setView,setFilter} from "../utils/watchlistUISlice"
 const WatchlistToolbar = () => {
     const [showSortMenu, setShowSortMenu] = useState(false);
 
-    const [selectedSort, setSelectedSort] = useState("Recently Added");
+    const dispatch = useDispatch()
+
+    const selectedSort = useSelector(store=>store.watchlistUI.sortBy)
+    const selectedFilter = useSelector(store=>store.watchlistUI.filter)
+    const selectedView = useSelector(store=>store.watchlistUI.view)
+    const getFilterButtonClass = (filterName) => {
+        return `h-10 rounded-xl px-5 text-sm font-medium transition-all ${selectedFilter === filterName
+                ? "bg-violet-900 text-white"
+                : "border border-zinc-800 bg-[#0F0F12] text-zinc-300 hover:border-violet-500/40 hover:bg-violet-500/10"
+            }
+        `;
+    };
     const sortOptions = [
         "Recently Added",
         "Oldest Added",
@@ -53,61 +60,25 @@ const WatchlistToolbar = () => {
           {/* All */}
 
           <button
-            className="
-            h-10
-            rounded-xl
-            bg-violet-900
-            px-5
-            text-sm
-            font-medium
-            text-white
-            transition-all
-            hover:bg-violet-800
-            "
-          >
-            All
+            onClick={() => dispatch(setFilter("all"))}
+            className={getFilterButtonClass('all')}
+            >All
           </button>
 
           {/* Movies */}
 
           <button
-            className="
-            h-10
-            rounded-xl
-            border
-            border-zinc-800
-            bg-[#0F0F12]
-            px-5
-            text-sm
-            font-medium
-            text-zinc-300
-            transition-all
-            hover:border-violet-500/40
-            hover:bg-violet-500/10
-            "
-          >
-            Movies
+            onClick={() => dispatch(setFilter("movie"))}
+            className={getFilterButtonClass("movie")}
+            >Movies
           </button>
 
           {/* TV */}
 
           <button
-            className="
-            h-10
-            rounded-xl
-            border
-            border-zinc-800
-            bg-[#0F0F12]
-            px-5
-            text-sm
-            font-medium
-            text-zinc-300
-            transition-all
-            hover:border-violet-500/40
-            hover:bg-violet-500/10
-            "
-          >
-            TV Shows
+            onClick={() => dispatch(setFilter("tv"))}
+            className={getFilterButtonClass("tv")}
+            >TV
           </button>
 
         </div>
@@ -161,7 +132,7 @@ const WatchlistToolbar = () => {
                         <button
                             key={option}
                             onClick={()=>{
-                                setSelectedSort(option)
+                                dispatch(setSortBy(option))
                                 setShowSortMenu(false)
                             }}
                             className={`w-full flex justify-between items-center px-4 py-3 rounded-lg text-sm transition-all
