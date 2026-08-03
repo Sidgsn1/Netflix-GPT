@@ -17,6 +17,15 @@ const WatchlistToolbar = () => {
             }
         `;
     };
+    const getViewButtonClass = (viewName) => {
+    return `flex h-10 w-11 items-center justify-center rounded-xl transition-all duration-300
+        ${
+            selectedView === viewName
+                ? "bg-violet-900 text-white"
+                : "border border-zinc-800 bg-[#0F0F12] text-zinc-300 hover:border-violet-500/40 hover:bg-violet-500/10"
+        }
+    `;
+};
     const sortOptions = [
         "Recently Added",
         "Oldest Added",
@@ -160,41 +169,16 @@ const WatchlistToolbar = () => {
 
           {/* Grid */}
 
-          <button
-            className="
-            flex
-            h-10
-            w-11
-            items-center
-            justify-center
-            rounded-xl
-            bg-violet-900
-            text-white
-            transition-all
-            hover:bg-violet-800
-            "
+          <button onClick={()=>dispatch(setView("grid"))}
+            className={getViewButtonClass("grid")}
           >
             <LayoutGrid size={18} />
           </button>
 
           {/* List */}
 
-          <button
-            className="
-            flex
-            h-10
-            w-11
-            items-center
-            justify-center
-            rounded-xl
-            border
-            border-zinc-800
-            bg-[#0F0F12]
-            text-zinc-300
-            transition-all
-            hover:border-violet-500/40
-            hover:bg-violet-500/10
-            "
+          <button onClick={()=>dispatch(setView("list"))}
+            className={getViewButtonClass("list")}
           >
             <List size={18} />
           </button>

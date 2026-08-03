@@ -9,7 +9,6 @@ const WatchlistCard = ({movieData,genres}) => {
 
     const dispatch = useDispatch()
     const uid = useSelector(store => store.user?.uid)
-    // const watchlistMovies = useSelector(store=>store.watchlist.movies)
 
     // const isAdded = watchlistMovies.some(movie=>movie.movieId === movieData.id)
 
@@ -30,7 +29,7 @@ const WatchlistCard = ({movieData,genres}) => {
   return (
     <div>
         <div className="group relative rounded-xl p-[1.5px] transition-all duration-500 ease-out cursor-pointer hover:bg-gradient-to-r hover:from-[#7C3AED] hover:via-[#A855F7] hover:to-[#FBBF24] hover:shadow-[0_0_20px_rgba(168,85,247,.35)]">
-            <div className="border-[1px]  border-amber-50/10 rounded-xl overflow-hidden">
+            <div className="border-[1px] border-amber-50/10 rounded-xl overflow-hidden">
                 <div className="relative">
                     <img
                         className="w-full h-full object-cover"

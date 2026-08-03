@@ -1,4 +1,4 @@
-import { deleteDoc, doc, serverTimestamp, setDoc } from "firebase/firestore"
+import { deleteDoc, doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore"
 import { db } from "./firebase"
 import { collection, getDocs } from "firebase/firestore";
 
@@ -12,6 +12,7 @@ export const addMovieToWatchlist = async (uid,movie)=>{
     const watchlistMovie = {
         movieId: movie.id,
         title: movie.title,
+        overview: movie.overview,
         poster_path: movie.poster_path,
         vote_average: movie.vote_average,
         release_date: movie.release_date,
@@ -20,7 +21,10 @@ export const addMovieToWatchlist = async (uid,movie)=>{
     }
 
     await setDoc(movieRef,watchlistMovie)
-    return watchlistMovie
+    // return watchlistMovie
+    const snapshot = await getDoc(movieRef);
+
+    return snapshot.data();
 }
 
 export const getWatchlist = async (uid) => {
