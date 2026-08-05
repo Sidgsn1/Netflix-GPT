@@ -20,10 +20,9 @@ const Browse=()=>{
     useUpcomingMovies()
     useMovieGenres()
     useWatchlist()
-
+    console.log("browse page is herer")
     return(
         <div className="bg-black">
-            <Header />
             {
                 showGptSearch ? (<GptSearch />) : (
                     <>

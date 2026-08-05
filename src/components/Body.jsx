@@ -7,6 +7,9 @@ import WatchlistPage from "./WatchlistPage"
 import AuthListener from "./AuthListener";
 import ProtectedRoute from "./ProtectedRoute"
 import GuestRoute from "./GuestRoute"
+import AppLayout from "./AppLayout"
+import MoviesPage from "./MoviesPage"
+import TvShowsPage from "./TvShowsPage"
 
 const Body = () => {
 
@@ -20,25 +23,51 @@ const Body = () => {
       )
     },
     {
-      path:"/browse",
-      element: (
+      
+      element:(
         <ProtectedRoute>
-          <Browse />
+          <AppLayout />
         </ProtectedRoute>
-      )
+      ),
+      children:[
+        {
+          path:"/browse",
+          element:<Browse />
+        },
+        {
+          path:"/watchlist",
+          element:<WatchlistPage />
+        },
+        {
+          path:"/movies",
+          element:<MoviesPage />
+        },
+        {
+          path:"/tvshows",
+          element:<TvShowsPage />
+        }
+      ]
     },
+    // {
+    //   path:"/browse",
+    //   element: (
+    //     <ProtectedRoute>
+    //       <Browse />
+    //     </ProtectedRoute>
+    //   )
+    // },
     {
       path:"/error",
       element: <Error />
     },
-    {
-      path:"/watchlist",
-      element:(
-        <ProtectedRoute>
-          <WatchlistPage />
-        </ProtectedRoute>
-      )
-    }
+    // {
+    //   path:"/watchlist",
+    //   element:(
+    //     <ProtectedRoute>
+    //       <WatchlistPage />
+    //     </ProtectedRoute>
+    //   )
+    // }
   ])
   
 
