@@ -14,6 +14,7 @@ export const addMovieToWatchlist = async (uid,movie)=>{
         title: movie.title,
         overview: movie.overview,
         poster_path: movie.poster_path,
+        backdrop_path: movie.backdrop_path,
         vote_average: movie.vote_average,
         release_date: movie.release_date,
         genre_ids: movie.genre_ids,

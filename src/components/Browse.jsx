@@ -9,6 +9,11 @@ import MainContainer from "./MainContainer"
 import SecondaryContainer from "./SecondaryContainer"
 import useMovieGenres from "../hooks/useMovieGenres"
 import useWatchlist from "../hooks/useWatchlist"
+import useOnTheAirTV from "../hooks/useOnTheAirTv"
+import useTopRatedTV from "../hooks/useTopRatedTv"
+import usePopularTV from "../hooks/usePopularTv"
+import useAiringTodayTv from "../hooks/useAiringTodayTv"
+import useTVGenres from "../hooks/useTvGenres"
 
 const Browse=()=>{
 
@@ -18,7 +23,14 @@ const Browse=()=>{
     usePopularMovies()
     useTopRatedMovies()
     useUpcomingMovies()
+
+    useAiringTodayTv();
+    usePopularTV();
+    useTopRatedTV();
+    useOnTheAirTV();
+
     useMovieGenres()
+    useTVGenres()
     useWatchlist()
     console.log("browse page is herer")
     return(

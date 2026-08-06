@@ -13,7 +13,7 @@ const WatchlistCard = ({movieData,genres}) => {
     // const isAdded = watchlistMovies.some(movie=>movie.movieId === movieData.id)
 
     if (!movieData || !genres) return null;
-    const {poster_path, vote_average, release_date, genre_ids,title} = movieData
+    const {backdrop_path,poster_path, vote_average, release_date, genre_ids,title} = movieData
     const movieGenres = genre_ids?.slice(0,2)?.map((id)=>genres[id])?.join(", ")||"unknown"
 
     
@@ -33,7 +33,7 @@ const WatchlistCard = ({movieData,genres}) => {
                 <div className="relative">
                     <img
                         className="w-full h-full object-cover"
-                        src={poster_path ? IMG_CDN_URL + poster_path : NoPosterExist}
+                            src={poster_path ? IMG_CDN_URL + poster_path : NoPosterExist}
                         alt={title}
                     />
                 </div>

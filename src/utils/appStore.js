@@ -4,12 +4,14 @@ import moviesReducer from "./moviesSlice"
 import gptReducer from "./gptSlice"
 import watchlistReducer from "./watchlistSlice"
 import watchlistUIReducer from "./watchlistUISlice"
+import tvReducer from "./tvSlice"
 const appStore=configureStore({//it will have reducer
 
     reducer:{//and this reducer will have different reducer from different slices
 
         user:userReducer,
         movies:moviesReducer,
+        tv:tvReducer,
         gpt:gptReducer,
         watchlist:watchlistReducer,
         watchlistUI:watchlistUIReducer

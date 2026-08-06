@@ -8,7 +8,7 @@ import AuthListener from "./AuthListener";
 import ProtectedRoute from "./ProtectedRoute"
 import GuestRoute from "./GuestRoute"
 import AppLayout from "./AppLayout"
-import MoviesPage from "./MoviesPage"
+import MoviesPage from "./movieComponent/MoviesPage"
 import TvShowsPage from "./TvShowsPage"
 
 const Body = () => {

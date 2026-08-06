@@ -4,8 +4,7 @@ import NoPosterExist from "../assets/images/noPoster.png"
 import { formatRelativeTime } from "../utils/formatRelativeTime";
 
 const WatchlistListCard = ({movieData,genres}) => {
-    const {title,poster_path,vote_average,release_date,genre_ids,overview,addedAt,} = movieData;
-
+    const {backdrop_path,title,vote_average,release_date,genre_ids,overview,addedAt,} = movieData;
     const movieGenres =genre_ids?.slice(0, 2)?.map((id) => genres?.[id])?.join(", ") || "Unknown";
     const releaseYear = release_date? release_date.split("-")[0]: "-";
     const addedDate = addedAt?.toDate().toLocaleDateString("en-GB", {day: "numeric",month: "short",year: "numeric",});
@@ -15,7 +14,7 @@ const WatchlistListCard = ({movieData,genres}) => {
         duration-300 hover:border-violet-500/40 hover:bg-[#151518]">
         <div className="w-48 h-26 shrink-0 overflow-hidden rounded-xl">
 
-            <img className="w-full h-full object-contain object-top" src={poster_path?IMG_CDN_URL+poster_path:NoPosterExist}/>
+            <img className="w-full h-full object-cover" src={backdrop_path?IMG_CDN_URL+backdrop_path:NoPosterExist}/>
 
         </div>
 
