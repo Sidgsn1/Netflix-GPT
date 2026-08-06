@@ -13,7 +13,7 @@ const WatchlistCard = ({movieData,genres}) => {
     // const isAdded = watchlistMovies.some(movie=>movie.movieId === movieData.id)
 
     if (!movieData || !genres) return null;
-    const {backdrop_path,poster_path, vote_average, release_date, genre_ids,title} = movieData
+    const {poster_path, vote_average, release_date, genre_ids,title,mediaType} = movieData
     const movieGenres = genre_ids?.slice(0,2)?.map((id)=>genres[id])?.join(", ")||"unknown"
 
     
@@ -21,9 +21,9 @@ const WatchlistCard = ({movieData,genres}) => {
 
         if (!uid) return;
 
-        await removeMovieFromWatchlist(uid, movieData.movieId);
+        await removeMovieFromWatchlist(uid,movieData.movieId,mediaType);
 
-        dispatch(removeMovie(movieData.movieId));
+        dispatch(removeMovie({movieId: movieData.movieId,mediaType: mediaType,}));
     }
     
   return (

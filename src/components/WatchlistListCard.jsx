@@ -4,7 +4,7 @@ import NoPosterExist from "../assets/images/noPoster.png"
 import { formatRelativeTime } from "../utils/formatRelativeTime";
 
 const WatchlistListCard = ({movieData,genres}) => {
-    const {backdrop_path,title,vote_average,release_date,genre_ids,overview,addedAt,} = movieData;
+    const {backdrop_path,title,vote_average,release_date,genre_ids,overview,addedAt,mediaType} = movieData;
     const movieGenres =genre_ids?.slice(0, 2)?.map((id) => genres?.[id])?.join(", ") || "Unknown";
     const releaseYear = release_date? release_date.split("-")[0]: "-";
     const addedDate = addedAt?.toDate().toLocaleDateString("en-GB", {day: "numeric",month: "short",year: "numeric",});

@@ -21,7 +21,7 @@ const GptMovieSuggestion = () => {
                 gptMovies.map((movie,index)=>{
                     if(!movie) return null
                     return(
-                        <GptMovieCard key={movie.id} title={movieNames[index]} genres={genres} movieData={movie} />
+                        <GptMovieCard key={movie.id} title={movieNames[index]} genres={genres} mediaData={movie} />
                     )
                 })
             }

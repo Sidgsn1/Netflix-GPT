@@ -2,24 +2,34 @@ import { deleteDoc, doc, getDoc, serverTimestamp, setDoc } from "firebase/firest
 import { db } from "./firebase"
 import { collection, getDocs } from "firebase/firestore";
 
-export const addMovieToWatchlist = async (uid,movie)=>{
+export const addMovieToWatchlist = async (uid,movie,mediaType)=>{
+
     const movieRef = doc(
         db,
-        "users",uid,
-        "watchlist",movie.id.toString()
-    )
+        "users",
+        uid,
+        "watchlist",
+        `${mediaType}_${movie.id}`
+    );
 
     const watchlistMovie = {
         movieId: movie.id,
-        title: movie.title,
+        mediaType: mediaType,
+
+        title: movie.title || movie.name,
         overview: movie.overview,
+
         poster_path: movie.poster_path,
         backdrop_path: movie.backdrop_path,
+
         vote_average: movie.vote_average,
-        release_date: movie.release_date,
+
+        release_date: movie.release_date || movie.first_air_date,
+
         genre_ids: movie.genre_ids,
-        addedAt: serverTimestamp()
-    }
+
+        addedAt: serverTimestamp(),
+    };
 
     await setDoc(movieRef,watchlistMovie)
     // return watchlistMovie
@@ -40,14 +50,18 @@ export const getWatchlist = async (uid) => {
     return snapshot.docs.map(doc=>doc.data())
 }
 
-export const removeMovieFromWatchlist = async (uid, movieId) => {
-
+export const removeMovieFromWatchlist = async (
+    uid,
+    movieId,
+    mediaType
+) => {
+    console.log("Deleting:", `${mediaType}_${movieId}`);
     const movieRef = doc(
         db,
         "users",
         uid,
         "watchlist",
-        movieId.toString()
+        `${mediaType}_${movieId}`
     );
 
     await deleteDoc(movieRef);

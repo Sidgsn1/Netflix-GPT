@@ -2,7 +2,7 @@
 import watchlistBg from "../../assets/images/watchlistBg.png"
 
 
-const MovieHero = () => {
+const TVHero = () => {
 
   return (
     <section className='relative h-[360px] overflow-hidden flex pt-20'>
@@ -17,8 +17,8 @@ const MovieHero = () => {
       <div className="relative z-30 p-10 pt-20">
         <div className="flex gap-5 text-white">
           <div className="flex flex-col gap-4">
-            <h1 className="text-3xl lg:text-5xl font-bold">Movies</h1>
-            <p className="text-sm lg:text-lg text-zinc-300">Movies and shows you've saved to watch later</p>
+            <h1 className="text-3xl lg:text-5xl font-bold">TV Shows</h1>
+            <p className="text-sm lg:text-lg text-zinc-300">Discover the best TV Shows from around the world.</p>
           </div>
         </div>
 
@@ -27,4 +27,4 @@ const MovieHero = () => {
   )
 }
 
-export default MovieHero
+export default TVHero

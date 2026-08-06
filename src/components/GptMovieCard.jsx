@@ -7,16 +7,22 @@ import { addMovieToWatchlist } from "../utils/firestore";
 import { removeMovie } from "../utils/watchlistSlice";
 import { removeMovieFromWatchlist } from "../utils/firestore";
 
-const GptMovieCard = ({title,movieData,genres}) => {
+const GptMovieCard = ({title,mediaData,genres,type}) => {
 
     const dispatch = useDispatch()
     const uid = useSelector(store => store.user?.uid)
     const watchlistMovies = useSelector(store=>store.watchlist.movies)
 
-    const isAdded = watchlistMovies.some(movie=>movie.movieId === movieData.id)
+    const mediaType = mediaData.media_type || type;
 
-    if (!movieData || !genres) return null;
-    const {poster_path, vote_average, release_date, genre_ids} = movieData
+    const isAdded = watchlistMovies.some(
+        (movie) =>
+            movie.movieId === mediaData.id &&
+            movie.mediaType === mediaType
+    );
+
+    if (!mediaData || !genres) return null;
+    const {poster_path, vote_average, release_date,first_air_date, genre_ids} = mediaData
     const movieGenres = genre_ids?.slice(0,2)?.map((id)=>genres[id])?.join(", ")||"unknown"
 
     const handleAddToWatchlist = async()=>{
@@ -25,9 +31,9 @@ const GptMovieCard = ({title,movieData,genres}) => {
         return;
         }
         console.log("UID:", uid);
-        console.log("Movie:", movieData);
+        console.log("Movie:", mediaData);
 
-        const savedMovie = await addMovieToWatchlist(uid, movieData);
+        const savedMovie = await addMovieToWatchlist(uid,mediaData,mediaType);
         dispatch(addMovie(savedMovie));
     }
     
@@ -35,9 +41,9 @@ const GptMovieCard = ({title,movieData,genres}) => {
 
         if (!uid) return;
 
-        await removeMovieFromWatchlist(uid, movieData.id);
+        await removeMovieFromWatchlist(uid,mediaData.id,mediaType);
 
-        dispatch(removeMovie(movieData.id));
+        dispatch(removeMovie({movieId: mediaData.id,mediaType: mediaType,}));
     }
     
   return (
@@ -89,7 +95,7 @@ const GptMovieCard = ({title,movieData,genres}) => {
                         </div>
                     </div>
                     <div className="flex gap-2 text-amber-100/40 items-center text-sm">
-                        <h1>{release_date ? release_date.split("-")[0]:"-"}</h1>
+                        <h1>{(release_date || first_air_date)? (release_date || first_air_date).split("-")[0]: "-"}</h1>
                         <div className="w-1 h-1 bg-amber-100/40 rounded-full"></div>
                         <h1 className="truncate">{movieGenres || "unknown"}</h1>
                     </div>

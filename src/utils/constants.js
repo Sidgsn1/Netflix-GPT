@@ -13,6 +13,10 @@ export const API_OPTIONS = {
     }
 };
 
+export const TRENDING_TODAY_API = "https://api.themoviedb.org/3/trending/all/day?language=en-US";
+
+export const TRENDING_WEEK_API = "https://api.themoviedb.org/3/trending/all/week?language=en-US";
+
 export const IMG_CDN_URL = "https://image.tmdb.org/t/p/w200"
 
 export const GPT_BG="https://chatgpt.com/backend-api/estuary/content?id=file_00000000a8c881fa910e11dcbf6915d1&ts=495656&p=fs&cid=1&sig=ca389a9347b4be42e4947c59da8bc97e657de6bc572f70f7d7762d3e226ba288&v=0"

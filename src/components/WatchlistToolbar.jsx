@@ -10,6 +10,7 @@ const WatchlistToolbar = () => {
     const selectedSort = useSelector(store=>store.watchlistUI.sortBy)
     const selectedFilter = useSelector(store=>store.watchlistUI.filter)
     const selectedView = useSelector(store=>store.watchlistUI.view)
+    
     const getFilterButtonClass = (filterName) => {
         return `h-10 rounded-xl px-5 text-sm font-medium transition-all ${selectedFilter === filterName
                 ? "bg-violet-900 text-white"

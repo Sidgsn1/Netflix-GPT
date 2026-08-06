@@ -9,7 +9,7 @@ import ProtectedRoute from "./ProtectedRoute"
 import GuestRoute from "./GuestRoute"
 import AppLayout from "./AppLayout"
 import MoviesPage from "./movieComponent/MoviesPage"
-import TvShowsPage from "./TvShowsPage"
+import TVPage from "./tvComponent/TvPage"
 
 const Body = () => {
 
@@ -44,7 +44,7 @@ const Body = () => {
         },
         {
           path:"/tvshows",
-          element:<TvShowsPage />
+          element:<TVPage />
         }
       ]
     },
