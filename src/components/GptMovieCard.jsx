@@ -2,6 +2,7 @@ import {  CirclePlus, Heart, Star, Trash2 } from "lucide-react"
 import { IMG_CDN_URL } from "../utils/constants"
 import NoPosterExist from "../assets/images/noPoster.png"
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 import { addMovie } from "../utils/watchlistSlice";
 import { addMovieToWatchlist } from "../utils/firestore";
 import { removeMovie } from "../utils/watchlistSlice";
@@ -10,10 +11,13 @@ import { removeMovieFromWatchlist } from "../utils/firestore";
 const GptMovieCard = ({title,mediaData,genres,type}) => {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate();
+
     const uid = useSelector(store => store.user?.uid)
     const watchlistMovies = useSelector(store=>store.watchlist.movies)
 
-    const mediaType = mediaData.media_type || type;
+    if (!mediaData || !genres) return null;
+    const mediaType = mediaData.media_type || type || "movie";
 
     const isAdded = watchlistMovies.some(
         (movie) =>
@@ -21,7 +25,6 @@ const GptMovieCard = ({title,mediaData,genres,type}) => {
             movie.mediaType === mediaType
     );
 
-    if (!mediaData || !genres) return null;
     const {poster_path, vote_average, release_date,first_air_date, genre_ids} = mediaData
     const movieGenres = genre_ids?.slice(0,2)?.map((id)=>genres[id])?.join(", ")||"unknown"
 
@@ -48,7 +51,8 @@ const GptMovieCard = ({title,mediaData,genres,type}) => {
     
   return (
     <div>
-        <div className="group relative rounded-xl p-[1.5px]  transition-all duration-500 ease-out cursor-pointer hover:bg-gradient-to-r hover:from-[#7C3AED] hover:via-[#A855F7] hover:to-[#FBBF24] hover:shadow-[0_0_20px_rgba(168,85,247,.35)]">
+        <div onClick={() =>navigate(`/${mediaType === "tv" ? "tv" : "movie"}/${mediaData.id}`)}
+            className="group relative rounded-xl p-[1.5px]  transition-all duration-500 ease-out cursor-pointer hover:bg-gradient-to-r hover:from-[#7C3AED] hover:via-[#A855F7] hover:to-[#FBBF24] hover:shadow-[0_0_20px_rgba(168,85,247,.35)]">
             <div className="border-[1px] border-amber-50/10 rounded-xl overflow-hidden">
                 <div className="relative w-full h-3/4">
                     <img
@@ -72,7 +76,16 @@ const GptMovieCard = ({title,mediaData,genres,type}) => {
                         transition-all
                         duration-300
                         group-hover:opacity-100
-                        group-hover:translate-y-0" onClick={isAdded ? handleRemoveFromWatchlist : handleAddToWatchlist}>
+                        group-hover:translate-y-0"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (isAdded) {
+                                handleRemoveFromWatchlist();
+                            } else {
+                                handleAddToWatchlist();
+                            }
+                        }}
+                        >
                         <div className="relative text-white rounded-xl p-[1.5px] bg-gradient-to-r from-[#7C3AED] via-[#A855F7] to-[#FBBF24]">
                             {isAdded ? (<div className="bg-black rounded-xl flex gap-5 px-4 py-3 text-sm">
                                 <Trash2 size={20} color="red"/>

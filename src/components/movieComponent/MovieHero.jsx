@@ -1,4 +1,5 @@
-
+import batmanBg from "../../assets/images/moviesBanner/batmanBg.jpg"
+import movieBg from "../../assets/images/moviesBanner/Moviehero.jpeg"
 import watchlistBg from "../../assets/images/watchlistBg.png"
 
 
@@ -7,11 +8,12 @@ const MovieHero = () => {
   return (
     <section className='relative h-[360px] overflow-hidden flex pt-20'>
       {/* Background img */}
-      <div className="absolute inset-0 bg-cover bg-no-repeat"style={{backgroundImage:`url(${watchlistBg})`,backgroundSize:"65%",backgroundPosition:"100% 30%"}}></div>
+      <div className="absolute inset-0 bg-cover bg-no-repeat"style={{backgroundImage:`url(${movieBg})`,backgroundSize:"100%",backgroundPosition:"100% 30%"}}></div>
       {/* Black Overlay */}
-      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="absolute inset-0 bg-black/10"></div>
       {/* Bottom Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-[#09090B]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-[#000000]" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/30 to-transparent" />
       {/* content */}
 
       <div className="relative z-30 p-10 pt-20">

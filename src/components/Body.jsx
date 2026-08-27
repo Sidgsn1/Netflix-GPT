@@ -10,6 +10,8 @@ import GuestRoute from "./GuestRoute"
 import AppLayout from "./AppLayout"
 import MoviesPage from "./movieComponent/MoviesPage"
 import TVPage from "./tvComponent/TvPage"
+import MovieDetails from "./details/movie/MovieDetails";
+// import TVDetails from "./details/tv/TVDetails";
 
 const Body = () => {
 
@@ -45,29 +47,21 @@ const Body = () => {
         {
           path:"/tvshows",
           element:<TVPage />
-        }
+        },
+        {
+          path: "/movie/:movieId",
+          element: <MovieDetails />
+        },
+        // {
+        //   path: "/tv/:tvId",
+        //   element: <TVDetails />
+        // },
       ]
     },
-    // {
-    //   path:"/browse",
-    //   element: (
-    //     <ProtectedRoute>
-    //       <Browse />
-    //     </ProtectedRoute>
-    //   )
-    // },
     {
       path:"/error",
       element: <Error />
     },
-    // {
-    //   path:"/watchlist",
-    //   element:(
-    //     <ProtectedRoute>
-    //       <WatchlistPage />
-    //     </ProtectedRoute>
-    //   )
-    // }
   ])
   
 

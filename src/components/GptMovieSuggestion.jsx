@@ -5,7 +5,8 @@ import { useSelector } from "react-redux"
 
 const GptMovieSuggestion = () => {
     const gpt = useSelector(store => store.gpt)
-    const genres = useSelector(store => store.movies.genres)
+    const movieGenres = useSelector(store => store.movies.genres);
+    const tvGenres = useSelector(store => store.tv.genres);
     const { gptMovies,movieNames } = gpt
 
     if(!movieNames) return null
@@ -21,7 +22,10 @@ const GptMovieSuggestion = () => {
                 gptMovies.map((movie,index)=>{
                     if(!movie) return null
                     return(
-                        <GptMovieCard key={movie.id} title={movieNames[index]} genres={genres} mediaData={movie} />
+                        <GptMovieCard key={movie.id} title={movie.title || movie.name} genres={ 
+                            movie.media_type === "tv"
+                            ? tvGenres: movieGenres
+                        } mediaData={movie} />
                     )
                 })
             }

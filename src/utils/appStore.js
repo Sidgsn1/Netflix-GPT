@@ -5,6 +5,8 @@ import gptReducer from "./gptSlice"
 import watchlistReducer from "./watchlistSlice"
 import watchlistUIReducer from "./watchlistUISlice"
 import tvReducer from "./tvSlice"
+import movieDetailsReducer from "./movieDetailsSlice";
+import tvDetailsReducer from "./tvDetailsSlice";
 const appStore=configureStore({//it will have reducer
 
     reducer:{//and this reducer will have different reducer from different slices
@@ -14,7 +16,9 @@ const appStore=configureStore({//it will have reducer
         tv:tvReducer,
         gpt:gptReducer,
         watchlist:watchlistReducer,
-        watchlistUI:watchlistUIReducer
+        watchlistUI:watchlistUIReducer,
+        movieDetails: movieDetailsReducer,
+        tvDetails: tvDetailsReducer,
     }
 })
 

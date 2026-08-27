@@ -4,17 +4,18 @@ import { collection, getDocs } from "firebase/firestore";
 
 export const addMovieToWatchlist = async (uid,movie,mediaType)=>{
 
+    const finalMediaType = mediaType || movie.media_type || "movie";
     const movieRef = doc(
         db,
         "users",
         uid,
         "watchlist",
-        `${mediaType}_${movie.id}`
+        `${finalMediaType}_${movie.id}`
     );
 
     const watchlistMovie = {
         movieId: movie.id,
-        mediaType: mediaType,
+        mediaType: finalMediaType,
 
         title: movie.title || movie.name,
         overview: movie.overview,

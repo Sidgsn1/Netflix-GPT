@@ -10,31 +10,47 @@ const GptSearchBar = () => {
     const searchText = useRef(null)
     const dispatch = useDispatch()
 
-    //search movie in TMDB
-    const searchMovieTMDB = async (movie) => {
-        const data = await fetch("https://api.themoviedb.org/3/search/movie?query="+ movie +
-            "&include_adult=false&language=en-US&page=1",API_OPTIONS)
+    //search movie/tv in TMDB
+    // const searchMovieTMDB = async (movie) => {
+    //     const data = await fetch("https://api.themoviedb.org/3/search/movie?query="+ movie +
+    //         "&include_adult=false&language=en-US&page=1",API_OPTIONS)
         
-        const jsonData = await data.json()
+    //     const jsonData = await data.json()
 
-        return jsonData.results?.[0]
-    }
+    //     return jsonData.results?.[0]
+    // }
+    const searchMediaTMDB = async (media) => {
+        const data = await fetch(
+            "https://api.themoviedb.org/3/search/multi?query=" +
+            encodeURIComponent(media) +
+            "&include_adult=false&language=en-US&page=1",
+            API_OPTIONS
+        );
+
+        const jsonData = await data.json();
+
+        return jsonData.results?.find(
+            item =>
+                item.media_type === "movie" ||
+                item.media_type === "tv"
+        );
+    };
     const handleGptSearchClick = async () => {
         try {
             console.count("Gemini API Call");
-            const query=`
-                Act as an expert Movie Recommendation System.
+            const query = `
+                Act as an expert movie and TV show recommendation system.
 
-                Recommend exactly 6 movies for the following request:
+                Recommend exactly 6 movies or TV shows for the following request:
 
                 "${searchText.current.value}"
 
                 Rules:
-                - Return ONLY the movie names.
-                - Separate each movie with a comma.
+                - Return ONLY the movie or TV show titles.
+                - Separate each title with a comma.
                 - Do not add numbering.
                 - Do not write explanations.
-                `;
+            `;
             const response = await geminiAi.models.generateContent({
                 model: "gemini-3.5-flash",
                 contents:query
@@ -43,7 +59,7 @@ const GptSearchBar = () => {
             console.log(geminiMovies)
             //here we got an array of movies ['Gol Maal', ' Chupke Chupke', ' Jaane Bhi Do Yaaro', ' Padosan', ' Angoor']
             //now for each movie I will search TMDB API
-            const promiseArray = geminiMovies.map(movie => searchMovieTMDB(movie)) //here we will get [Promise,Promise,Promise,Promise,Promise] 
+            const promiseArray = geminiMovies.map(movie => searchMediaTMDB(movie)) //here we will get [Promise,Promise,Promise,Promise,Promise] 
 
             const tmdbResults = await Promise.all(promiseArray) //when all the promise will be resolved then only we will get the tmdbResults
             console.log(tmdbResults)
