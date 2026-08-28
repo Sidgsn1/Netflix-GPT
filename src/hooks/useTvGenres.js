@@ -3,7 +3,7 @@ import { API_OPTIONS } from "../utils/constants";
 import { addTVGenres } from "../utils/tvSlice";
 import { useEffect } from "react";
 
-const useTVGenres = () => {
+const useTvGenres = () => {
 
     const dispatch = useDispatch();
 
@@ -39,4 +39,4 @@ const useTVGenres = () => {
 
 };
 
-export default useTVGenres;
+export default useTvGenres;
