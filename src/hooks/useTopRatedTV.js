@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { API_OPTIONS } from "../utils/constants";
 import { addTopRatedTV } from "../utils/tvSlice";
 
-const useTopRatedTV = () => {
+const useTopRatedTv = () => {
 
     const dispatch = useDispatch();
 
@@ -31,4 +31,4 @@ const useTopRatedTV = () => {
 
 };
 
-export default useTopRatedTV;
+export default useTopRatedTv;

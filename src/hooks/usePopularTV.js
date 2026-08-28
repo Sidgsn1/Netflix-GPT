@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { API_OPTIONS } from "../utils/constants";
 import { addPopularTV } from "../utils/tvSlice";
 
-const usePopularTV = () => {
+const usePopularTv = () => {
 
     const dispatch = useDispatch();
 
@@ -31,4 +31,4 @@ const usePopularTV = () => {
 
 };
 
-export default usePopularTV;
+export default usePopularTv;

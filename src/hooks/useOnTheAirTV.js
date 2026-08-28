@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { API_OPTIONS } from "../utils/constants";
 import { addOnTheAirTV } from "../utils/tvSlice";
 
-const useOnTheAirTV = () => {
+const useOnTheAirTv = () => {
 
     const dispatch = useDispatch();
 
@@ -31,4 +31,4 @@ const useOnTheAirTV = () => {
 
 };
 
-export default useOnTheAirTV;
+export default useOnTheAirTv;
