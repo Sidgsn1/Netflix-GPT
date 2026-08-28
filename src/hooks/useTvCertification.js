@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { API_OPTIONS } from "../utils/constants";
 import { setTVCertification } from "../utils/tvDetailsSlice";
 
-const useTVCertification = (tvId) => {
+const useTvCertification = (tvId) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -47,4 +47,4 @@ const useTVCertification = (tvId) => {
     }, [tvId, dispatch]);
 };
 
-export default useTVCertification;
+export default useTvCertification;

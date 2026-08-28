@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { API_OPTIONS } from "../utils/constants";
 import { setTVDetails } from "../utils/tvDetailsSlice";
 
-const useTVDetails = (tvId) => {
+const useTvDetails = (tvId) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -34,4 +34,4 @@ const useTVDetails = (tvId) => {
     }, [tvId, dispatch]);
 };
 
-export default useTVDetails;
+export default useTvDetails;

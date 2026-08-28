@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { API_OPTIONS } from "../utils/constants";
 import { setTVWatchProviders } from "../utils/tvDetailsSlice";
 
-const useTVWatchProviders = (tvId) => {
+const useTvWatchProviders = (tvId) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -36,4 +36,4 @@ const useTVWatchProviders = (tvId) => {
     }, [tvId, dispatch]);
 };
 
-export default useTVWatchProviders;
+export default useTvWatchProviders;
