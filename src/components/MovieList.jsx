@@ -1,39 +1,142 @@
-import { useSelector } from "react-redux"
-import GptMovieCard from "./GptMovieCard"
+import { useRef } from "react";
+import { useSelector } from "react-redux";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const MovieList=({title,media,type})=>{
-    // console.log("movieList",movies)    
-    const movieGenres = useSelector(store => store.movies.genres)
-    const tvGenres = useSelector(store => store.tv.genres)
+import GptMovieCard from "./GptMovieCard";
+
+const MovieList = ({ title, media, type }) => {
+
+    const movieGenres = useSelector((store) => store.movies.genres);
+    const tvGenres = useSelector((store) => store.tv.genres);
+
+    const scrollRef = useRef(null);
 
     if (!media) return null;
-    
-    return(
-        <div className="bg-transparent">
-            <h1 className="text-md md:text-xl lg:text-2xl font-semibold tracking-tighter py-5">{title}</h1>
-            <div className="flex overflow-x-scroll no-scrollbar">
-                <div className="flex gap-4">
-                    {/* {movies.map(movie=><GptMovieCard key={movie.id} title={movie.title} genres={genres} movieData={movie} />)} */}
-                    {media.map((item) => (
-                        <div key={item.id} className="w-52 shrink-0">
-                        <GptMovieCard
-                            title={item.title || item.name}
-                            genres={type === "movie"
-                            ? movieGenres
-                            : type === "tv"
-                            ? tvGenres
-                            : item.media_type === "tv"
-                            ? tvGenres
-                            : movieGenres}
-                            mediaData={item}
-                            type={type}
-                        />
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-    )
-}
 
-export default MovieList
+    const scroll = (direction) => {
+
+        if (!scrollRef.current) return;
+
+        scrollRef.current.scrollBy({
+            left: direction === "left" ? -500 : 500,
+            behavior: "smooth",
+        });
+    };
+
+    return (
+        <div className="bg-transparent">
+
+            {/* Section Title */}
+            <h1 className="text-md md:text-xl lg:text-2xl font-semibold tracking-tighter py-5">
+                {title}
+            </h1>
+
+            {/* Scroll Container */}
+            <div className="relative">
+
+                <div
+                    ref={scrollRef}
+                    className="flex overflow-x-auto no-scrollbar scroll-smooth"
+                >
+
+                    <div className="flex gap-4">
+
+                        {media.map((item) => (
+
+                            <div
+                                key={item.id}
+                                className="w-52 shrink-0"
+                            >
+
+                                <GptMovieCard
+                                    title={item.title || item.name}
+
+                                    genres={
+                                        type === "movie"
+                                            ? movieGenres
+                                            : type === "tv"
+                                            ? tvGenres
+                                            : item.media_type === "tv"
+                                            ? tvGenres
+                                            : movieGenres
+                                    }
+
+                                    mediaData={item}
+                                    type={type}
+                                />
+
+                            </div>
+
+                        ))}
+
+                    </div>
+
+                </div>
+
+
+                {/* Left Arrow */}
+
+                <button
+                    onClick={() => scroll("left")}
+                    className="
+                        absolute
+                        left-2
+                        top-1/2
+                        -translate-y-1/2
+                        z-10
+                        w-10
+                        h-10
+                        rounded-full
+                        bg-black/70
+                        backdrop-blur-md
+                        border
+                        border-white/10
+                        text-white
+                        flex
+                        items-center
+                        justify-center
+                        hover:bg-white/20
+                        transition
+                        cursor-pointer
+                    "
+                >
+                    <ChevronLeft size={22} />
+                </button>
+
+
+                {/* Right Arrow */}
+
+                <button
+                    onClick={() => scroll("right")}
+                    className="
+                        absolute
+                        right-2
+                        top-1/2
+                        -translate-y-1/2
+                        z-10
+                        w-10
+                        h-10
+                        rounded-full
+                        bg-black/70
+                        backdrop-blur-md
+                        border
+                        border-white/10
+                        text-white
+                        flex
+                        items-center
+                        justify-center
+                        hover:bg-white/20
+                        transition
+                        cursor-pointer
+                    "
+                >
+                    <ChevronRight size={22} />
+                </button>
+
+            </div>
+
+        </div>
+    );
+};
+
+export default MovieList;
