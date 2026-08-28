@@ -1,4 +1,5 @@
-import { CalendarDays, Clock3, Star } from "lucide-react";
+import { CalendarDays, Clock3, Plus, Star } from "lucide-react";
+import { useNavigate } from "react-router";
 
 const DetailHero = ({
     title,
@@ -13,11 +14,14 @@ const DetailHero = ({
     overview,
     onWatchlist,
     onTrailer,
+    isAdded,
 }) => {
 
     const formattedRuntime = runtime
         ? `${Math.floor(runtime / 60)}h ${runtime % 60}m`
         : null;
+
+    const navigate = useNavigate();
 
     return (
         <section className="relative min-h-[75vh] overflow-hidden">
@@ -38,16 +42,23 @@ const DetailHero = ({
 
             </div>
 
+            <button
+                onClick={() => navigate(-1)}
+                className="absolute top-24 left-6 z-20 flex items-center gap-2 px-4 py-2 rounded-lg bg-black/50 border border-white/10 text-white hover:bg-white/10 transition cursor-pointer"
+            >
+                ← Back
+            </button>
+
 
             {/* Hero Content */}
 
-            <div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-16">
+            <div className="relative z-10 max-w-7xl mx-auto px-6 pt-44 pb-10">
 
                 <div className="flex flex-col md:flex-row gap-8 items-center md:items-end">
 
                     {/* Poster */}
 
-                    <div className="w-56 shrink-0 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                    <div className="w-62 shrink-0 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
 
                         <img
                             src={posterPath}
@@ -62,7 +73,7 @@ const DetailHero = ({
 
                     <div className="max-w-3xl">
 
-                        <h1 className="text-4xl md:text-6xl font-bold text-white">
+                        <h1 className="text-4xl md:text-5xl font-bold text-white">
                             {title}
                         </h1>
 
@@ -139,7 +150,7 @@ const DetailHero = ({
                         {/* Overview */}
 
                         {overview && (
-                            <p className="mt-6 text-white/70 leading-relaxed text-base md:text-lg">
+                            <p className="mt-6 text-white/70 leading-relaxed text-base md:text-md">
                                 {overview}
                             </p>
                         )}
@@ -151,14 +162,15 @@ const DetailHero = ({
 
                             <button
                                 onClick={onWatchlist}
-                                className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#7C3AED] via-[#A855F7] to-[#FBBF24] text-white font-semibold transition-transform hover:scale-105"
+                                className="flex  gap-2 px-6 py-3 rounded-xl bg-white/10 border border-white/20  text-white font-semibold transition-transform hover:scale-105 cursor-pointer"
                             >
-                                + Add to Watchlist
+                                <Plus color="#ffffff" />
+                                {isAdded ? "Remove from Watchlist" : "Add to Watchlist"}
                             </button>
 
                             <button
                                 onClick={onTrailer}
-                                className="px-6 py-3 rounded-xl bg-white/10 border border-white/20 text-white font-semibold backdrop-blur-md hover:bg-white/20 transition-all"
+                                className="px-6 py-3 rounded-xl bg-white/10 border border-white/20 text-white cursor-pointer font-semibold backdrop-blur-md hover:bg-white/20 transition-all"
                             >
                                 Watch Trailer
                             </button>

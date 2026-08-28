@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { API_OPTIONS } from "../utils/constants";
-import { setMovieDetails } from "../utils/movieDetailsSlice";
+import { setMovieDetails, clearMovieDetails } from "../utils/movieDetailsSlice";
 
 const useMovieDetails = (movieId) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
         if (!movieId) return;
-
+        dispatch(clearMovieDetails());
         const fetchMovieDetails = async () => {
             try {
                 const data = await fetch(

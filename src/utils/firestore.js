@@ -27,7 +27,7 @@ export const addMovieToWatchlist = async (uid,movie,mediaType)=>{
 
         release_date: movie.release_date || movie.first_air_date,
 
-        genre_ids: movie.genre_ids,
+        genre_ids: movie.genre_ids || movie.genres?.map((genre) => genre.id) || [],
 
         addedAt: serverTimestamp(),
     };

@@ -1,27 +1,72 @@
+import { useRef } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import { IMG_CDN_URL } from "../../../utils/constants";
 import NoPosterExist from "../../../assets/images/noPoster.png";
 
 const CastSection = ({ cast }) => {
 
+    const castContainerRef = useRef(null);
+
     if (!cast || cast.length === 0) return null;
+
+    const scrollLeft = () => {
+        castContainerRef.current?.scrollBy({
+            left: -400,
+            behavior: "smooth",
+        });
+    };
+
+    const scrollRight = () => {
+        castContainerRef.current?.scrollBy({
+            left: 400,
+            behavior: "smooth",
+        });
+    };
 
     return (
         <section className="px-6 py-8">
 
-            <h2 className="text-2xl font-semibold text-yellow-100">
-                Cast & Crew
-            </h2>
+            <div className="flex items-center justify-between">
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-5 mt-6">
+                <h2 className="text-2xl font-semibold text-yellow-100">
+                    Cast & Crew
+                </h2>
+
+                <div className="flex gap-2">
+
+                    <button
+                        onClick={scrollLeft}
+                        className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white transition-all cursor-pointer"
+                    >
+                        <ChevronLeft size={18} />
+                    </button>
+
+                    <button
+                        onClick={scrollRight}
+                        className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white transition-all cursor-pointer"
+                    >
+                        <ChevronRight size={18} />
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                ref={castContainerRef}
+                className="flex gap-5 mt-6 overflow-x-auto pb-4 no-scrollbar"
+            >
 
                 {cast.map((person) => (
 
                     <div
                         key={person.id}
-                        className="group"
+                        className="group shrink-0 w-32"
                     >
 
-                        <div className="aspect-[2/3] rounded-xl overflow-hidden bg-white/5 border border-white/10">
+                        <div className="w-32 h-40 rounded-xl overflow-hidden bg-white/5 border border-white/10">
 
                             <img
                                 src={

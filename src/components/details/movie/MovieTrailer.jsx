@@ -9,7 +9,7 @@ const MovieTrailer = ({ videos }) => {
     if (!trailer) return null;
 
     return (
-        <section className="py-8">
+        <section id="trailer" className="py-8">
 
             <h2 className="text-2xl font-semibold text-yellow-100 mb-6">
                 Trailer

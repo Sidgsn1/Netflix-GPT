@@ -74,6 +74,22 @@ const MovieInfo = ({ movie }) => {
                     </p>
                 </div>
 
+                {/* Revenue */}
+
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                    <div className="flex items-center gap-2 text-white/40 text-sm mb-2">
+                        <CircleDollarSign size={16} />
+                        <span>Revenue</span>
+                    </div>
+
+                    <p className="text-white">
+                        {movie.revenue
+                            ? `$${movie.revenue.toLocaleString()}`
+                            : "N/A"
+                        }
+                    </p>
+                </div>
+
             </div>
 
 

@@ -1,5 +1,8 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
+
+import { addMovie, removeMovie } from "../../../utils/watchlistSlice";
+import {addMovieToWatchlist,removeMovieFromWatchlist} from "../../../utils/firestore";
 
 import useMovieDetails from "../../../hooks/useMovieDetails";
 import useMovieCertification from "../../../hooks/useMovieCertification";
@@ -14,6 +17,7 @@ import WhereToWatch from "../shared/WhereToWatch";
 
 const MovieDetails = () => {
     const { movieId } = useParams();
+    const dispatch = useDispatch();
 
     // Fetch movie details
     useMovieDetails(movieId);
@@ -24,6 +28,12 @@ const MovieDetails = () => {
     // Fetch where to watch data
     useMovieWatchProviders(movieId);
 
+    const handleTrailerClick = () => {
+    document.getElementById("trailer")?.scrollIntoView({
+            behavior: "smooth",
+        });
+    };
+
     const movie = useSelector((store) => store.movieDetails.data);
     const certification = useSelector(
         (store) => store.movieDetails.certification
@@ -32,13 +42,58 @@ const MovieDetails = () => {
         (store) => store.movieDetails.watchProviders
     );
 
+    const uid = useSelector((store) => store.user?.uid);
+
+    const watchlistMovies = useSelector(
+        (store) => store.watchlist.movies
+    );
+
+    const isAdded = watchlistMovies.some((item) =>
+        item.movieId === movie?.id &&
+        item.mediaType === "movie"
+    );
+
+    const handleWatchlist = async () => {
+        if (!uid) {
+            console.log("User not logged in");
+            return;
+        }
+
+        if (isAdded) {
+            await removeMovieFromWatchlist(
+                uid,
+                movie.id,
+                "movie"
+            );
+
+            dispatch(
+                removeMovie({
+                    movieId: movie.id,
+                    mediaType: "movie",
+                })
+            );
+
+            return;
+        }
+
+        const savedMovie = await addMovieToWatchlist(
+            uid,
+            movie,
+            "movie"
+        );
+
+        dispatch(addMovie(savedMovie));
+    };
+
     console.log("movieId:", movieId);
-console.log("movie:", movie);
+    console.log("movie:", movie);
 
     if (!movie) {
         return (
             <div className="min-h-screen bg-black text-white flex items-center justify-center">
-                <p>Loading...</p>
+                <p className="text-white/60 text-lg">
+                    Loading movie...
+                </p>
             </div>
         );
     }
@@ -59,6 +114,9 @@ console.log("movie:", movie);
                 rating={movie.vote_average}
                 voteCount={movie.vote_count}
                 overview={movie.overview}
+                onTrailer={handleTrailerClick}
+                onWatchlist={handleWatchlist}
+                isAdded={isAdded}
             />
 
             <div className="max-w-7xl mx-auto px-6 py-10">

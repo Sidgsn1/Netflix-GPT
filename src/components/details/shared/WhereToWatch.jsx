@@ -43,9 +43,12 @@ const WhereToWatch = ({ watchProviders }) => {
 
                 {uniqueProviders.map((provider) => (
 
-                    <div
+                    <a
                         key={provider.provider_id}
-                        className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10"
+                        href={watchProviders.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
                     >
 
                         <img
@@ -58,7 +61,7 @@ const WhereToWatch = ({ watchProviders }) => {
                             {provider.provider_name}
                         </span>
 
-                    </div>
+                    </a>
 
                 ))}
 
