@@ -9,7 +9,7 @@ import ProtectedRoute from "./ProtectedRoute"
 import GuestRoute from "./GuestRoute"
 import AppLayout from "./AppLayout"
 import MoviesPage from "./movieComponent/MoviesPage"
-import TVPage from "./tvComponent/TvPage"
+import TVPage from "./tvComponent/TVPage"
 import MovieDetails from "./details/movie/MovieDetails";
 // import TVDetails from "./details/tv/TVDetails";
 
