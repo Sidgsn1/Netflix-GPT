@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 
 import useTvDetails from "../../../hooks/useTvDetails";
 import useTvCertification from "../../../hooks/useTvCertification";
-import useTvWatchProviders from "../../../hooks/useTvWatchProviders";
+import useTvWatchProviders from "../../../hooks/useTvWatchProviders"
 
 const TVDetails = () => {
 
