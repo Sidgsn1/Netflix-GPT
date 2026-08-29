@@ -1,13 +1,26 @@
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { useParams } from "react-router";
+
+
+import { addMovie, removeMovie } from "../../../utils/watchlistSlice";
+import {addMovieToWatchlist,removeMovieFromWatchlist} from "../../../utils/firestore";
 
 import useTvDetails from "../../../hooks/useTvDetails";
 import useTvCertification from "../../../hooks/useTvCertification";
 import useTvWatchProviders from "../../../hooks/useTvWatchProviders"
 
+import DetailHero from "../shared/DetailHero";
+import TVInfo from "./TVInfo";
+import MovieTrailer from "../movie/MovieTrailer";
+import CastSection from "../shared/CastSection";
+import MoreLikeThis from "../shared/MoreLikeThis";
+import WhereToWatch from "../shared/WhereToWatch";
+import CurrentSeason from "./CurrentSeason";
+
 const TVDetails = () => {
 
     const { tvId } = useParams();
+    const dispatch = useDispatch();
 
     // Fetch TV details
     useTvDetails(tvId);
@@ -18,9 +31,45 @@ const TVDetails = () => {
     // Fetch watch providers
     useTvWatchProviders(tvId);
 
+    const uid = useSelector((store) => store.user?.uid);
+
+    const watchlistMovies = useSelector((store) => store.watchlist.movies);
+
     const tv = useSelector(
         (store) => store.tvDetails.data
     );
+
+    const isAdded = watchlistMovies.some((item) =>
+        item.movieId === tv?.id &&
+        item.mediaType === "tv"
+    );
+
+    const handleWatchlist = async () => {
+        if (!uid) {
+            console.log("User not logged in");
+            return;
+        }
+        if (isAdded) {
+            await removeMovieFromWatchlist(
+                uid,
+                tv.id,
+                "tv"
+            );
+
+            dispatch(
+                removeMovie({
+                    movieId: tv.id,
+                    mediaType: "tv",
+                })
+            );
+
+            return;
+        }
+
+        const savedTV = await addMovieToWatchlist(uid,tv,"tv");
+
+        dispatch(addMovie(savedTV));
+    };
 
     const certification = useSelector(
         (store) => store.tvDetails.certification
@@ -30,10 +79,18 @@ const TVDetails = () => {
         (store) => store.tvDetails.watchProviders
     );
 
-    console.log("tvId:", tvId);
-    console.log("tv:", tv);
-    console.log("certification:", certification);
-    console.log("watchProviders:", watchProviders);
+    const handleTrailerClick = () => {
+        document.getElementById("trailer")?.scrollIntoView({
+            behavior: "smooth",
+        });
+    };
+
+
+console.log("TV:", tv);
+console.log("Genres:", tv?.genres);
+console.log("Videos:", tv?.videos?.results);
+console.log("Cast:", tv?.credits?.cast);
+console.log("Recommendations:", tv?.recommendations?.results);
 
     if (!tv) {
         return (
@@ -46,9 +103,45 @@ const TVDetails = () => {
     return (
         <div className="min-h-screen bg-black text-white">
 
-            <h1 className="text-4xl text-white p-10">
-                {tv.name}
-            </h1>
+            <DetailHero
+                title={tv.name}
+                backdropPath={`https://image.tmdb.org/t/p/original${tv.backdrop_path}`}
+                posterPath={`https://image.tmdb.org/t/p/w500${tv.poster_path}`}
+                year={tv.first_air_date?.split("-")[0]}
+                runtime={tv.episode_run_time?.[0]}
+                certification={certification}
+                genres={tv.genres}
+                rating={tv.vote_average}
+                voteCount={tv.vote_count}
+                overview={tv.overview}
+                onWatchlist={handleWatchlist}
+                isAdded={isAdded}
+                onTrailer={handleTrailerClick}
+            />
+
+            <div className="max-w-7xl mx-auto px-6 py-10">
+
+                <WhereToWatch
+                    watchProviders={watchProviders}
+                />
+
+                <CurrentSeason seasons={tv.seasons} />
+
+                <TVInfo tv={tv} />
+
+                <MovieTrailer
+                    videos={tv.videos?.results}
+                />
+
+                <CastSection
+                    cast={tv.credits?.cast}
+                />
+
+                <MoreLikeThis
+                    media={tv.recommendations?.results}
+                />
+
+            </div>
 
         </div>
     );

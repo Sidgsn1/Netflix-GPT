@@ -11,7 +11,7 @@ import AppLayout from "./AppLayout"
 import MoviesPage from "./movieComponent/MoviesPage"
 import TVPage from "./tvComponent/TVPage"
 import MovieDetails from "./details/movie/MovieDetails";
-// import TVDetails from "./details/tv/TVDetails";
+import TVDetails from "./details/tv/TVDetails";
 
 const Body = () => {
 
@@ -52,10 +52,10 @@ const Body = () => {
           path: "/movie/:movieId",
           element: <MovieDetails />
         },
-        // {
-        //   path: "/tv/:tvId",
-        //   element: <TVDetails />
-        // },
+        {
+          path: "/tv/:tvId",
+          element: <TVDetails />
+        },
       ]
     },
     {
