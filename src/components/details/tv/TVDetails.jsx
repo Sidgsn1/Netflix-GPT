@@ -1,6 +1,5 @@
 import { useSelector,useDispatch } from "react-redux";
-import { useParams } from "react-router";
-
+import { useNavigate, useParams } from "react-router";
 
 import { addMovie, removeMovie } from "../../../utils/watchlistSlice";
 import {addMovieToWatchlist,removeMovieFromWatchlist} from "../../../utils/firestore";
@@ -18,9 +17,9 @@ import WhereToWatch from "../shared/WhereToWatch";
 import CurrentSeason from "./CurrentSeason";
 
 const TVDetails = () => {
-
     const { tvId } = useParams();
     const dispatch = useDispatch();
+    const navigate= useNavigate()
 
     // Fetch TV details
     useTvDetails(tvId);
@@ -38,6 +37,12 @@ const TVDetails = () => {
     const tv = useSelector(
         (store) => store.tvDetails.data
     );
+
+
+
+console.log("TV ID:", tvId);
+console.log("TV DATA:", tv);
+console.log("SEASONS:", tv?.seasons);
 
     const isAdded = watchlistMovies.some((item) =>
         item.movieId === tv?.id &&
@@ -84,6 +89,11 @@ const TVDetails = () => {
             behavior: "smooth",
         });
     };
+    const handleSeasonClick = (seasonNumber) => {
+        console.log("Selected Season:", seasonNumber);
+
+        navigate(`/tv/${tvId}/season/${seasonNumber}`);
+    };
 
 
 console.log("TV:", tv);
@@ -125,7 +135,7 @@ console.log("Recommendations:", tv?.recommendations?.results);
                     watchProviders={watchProviders}
                 />
 
-                <CurrentSeason seasons={tv.seasons} />
+                <CurrentSeason seasons={tv.seasons} onSeasonClick={handleSeasonClick}/>
 
                 <TVInfo tv={tv} />
 

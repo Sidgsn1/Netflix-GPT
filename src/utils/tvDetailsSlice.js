@@ -6,7 +6,8 @@ const tvDetailsSlice = createSlice({
     initialState: {
         data: null,
         certification: null,
-        watchProviders: null
+        watchProviders: null,
+        seasonEpisodes: null,
     },
 
     reducers: {
@@ -22,10 +23,15 @@ const tvDetailsSlice = createSlice({
             state.watchProviders = action.payload;
         },
 
+        setTVSeasonEpisodes: (state, action) => {
+            state.seasonEpisodes = action.payload;
+        },
+
         clearTVDetails: (state) => {
             state.data = null;
             state.certification = null;
             state.watchProviders = null;
+            state.seasonEpisodes = null;
         },
     },
 });
@@ -34,6 +40,7 @@ export const {
     setTVDetails,
     setTVCertification,
     setTVWatchProviders,
+    setTVSeasonEpisodes,
     clearTVDetails,
 } = tvDetailsSlice.actions;
 

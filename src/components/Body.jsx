@@ -12,6 +12,7 @@ import MoviesPage from "./movieComponent/MoviesPage"
 import TVPage from "./tvComponent/TVPage"
 import MovieDetails from "./details/movie/MovieDetails";
 import TVDetails from "./details/tv/TVDetails";
+import TVSeasonDetails from "./details/tv/TVSeasonDetails";
 
 const Body = () => {
 
@@ -55,6 +56,10 @@ const Body = () => {
         {
           path: "/tv/:tvId",
           element: <TVDetails />
+        },
+        {
+          path: "/tv/:tvId/season/:seasonNumber",
+          element: <TVSeasonDetails />
         },
       ]
     },

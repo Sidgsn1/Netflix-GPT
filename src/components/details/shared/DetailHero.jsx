@@ -33,7 +33,7 @@ const DetailHero = ({
                 <img
                     src={backdropPath}
                     alt={title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/30" />

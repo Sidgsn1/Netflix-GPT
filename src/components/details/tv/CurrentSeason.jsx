@@ -3,7 +3,7 @@ import { CalendarDays, ChevronRight, ChevronDown } from "lucide-react";
 import { IMG_CDN_URL } from "../../../utils/constants";
 import NoPosterExist from "../../../assets/images/noPoster.png";
 
-const CurrentSeason = ({ seasons }) => {
+const CurrentSeason = ({ seasons, onSeasonClick }) => {
 
     const [showAllSeasons, setShowAllSeasons] = useState(false);
 
@@ -13,10 +13,14 @@ const CurrentSeason = ({ seasons }) => {
         (season) => season.season_number > 0
     );
 
+console.log("All Seasons:", actualSeasons);
+
+
     if (actualSeasons.length === 0) return null;
 
-    const currentSeason =
-        actualSeasons[actualSeasons.length - 1];
+    const currentSeason =actualSeasons[actualSeasons.length - 1];
+
+console.log("Current Season:", currentSeason);
 
     const sortedSeasons = [...actualSeasons].reverse();
 
@@ -34,6 +38,7 @@ const CurrentSeason = ({ seasons }) => {
 
         return (
             <div
+                onClick={() => onSeasonClick(season.season_number)}
                 className={`
                     flex flex-col md:flex-row gap-6 p-4
                     rounded-xl
@@ -55,7 +60,7 @@ const CurrentSeason = ({ seasons }) => {
                                     : NoPosterExist
                             }
                             alt={season.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                         />
 
                     </div>
