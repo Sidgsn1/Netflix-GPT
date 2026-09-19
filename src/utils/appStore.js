@@ -1,7 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice"
 import moviesReducer from "./moviesSlice"
-import gptReducer from "./gptSlice"
+// import gptReducer from "./gptSlice"
+import spotlightReducer from "./spotlightSlice";
 import watchlistReducer from "./watchlistSlice"
 import watchlistUIReducer from "./watchlistUISlice"
 import tvReducer from "./tvSlice"
@@ -14,7 +15,7 @@ const appStore=configureStore({//it will have reducer
         user:userReducer,
         movies:moviesReducer,
         tv:tvReducer,
-        gpt:gptReducer,
+        spotlight: spotlightReducer,
         watchlist:watchlistReducer,
         watchlistUI:watchlistUIReducer,
         movieDetails: movieDetailsReducer,

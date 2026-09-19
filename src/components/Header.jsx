@@ -2,14 +2,16 @@ import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
 // import { addUser, removeUser } from "../utils/userSlice"
 import { LOGO } from "../utils/constants";
-import { LogOut,ChevronDown,Sparkles, Heart } from "lucide-react";
+import { LogOut,ChevronDown,Sparkles, Heart,Search } from "lucide-react";
 // import { toggleGptSearchView } from "../utils/gptSlice";
-import { openGptSearch, closeGptSearch } from "../utils/gptSlice";
+// import { openGptSearch, closeGptSearch } from "../utils/gptSlice";
+import {openSpotlight,closeSpotlight} from "../utils/spotlightSlice";
+import SpotlightSearch from "./search/SpotlightSearch";
 
 const Header = () => {
   const [showProfileMenu,setShowProfileMenu] = useState(false)
@@ -17,12 +19,8 @@ const Header = () => {
   const navigate=useNavigate()
   const user=useSelector(store=>store.user)
   const watchlistMovies = useSelector(store=>store.watchlist.movies)
-  const showGptSearch = useSelector(store=>store.gpt.showGptSearch)
+  const showSpotlight = useSelector(store => store.spotlight.showSpotlight);
   const dispatch=useDispatch();
-  const location = useLocation()
-
-  const isBrowsePage = location.pathname === "/browse"
-  const isWatchlistPage = location.pathname === "/watchlist"
 
   const navLinkClass = ({ isActive }) =>
   `text-xl font-medium transition-all duration-300
@@ -42,20 +40,34 @@ const Header = () => {
   }
 
 
-  const handleGptSearchClick = () => {
-      if (showGptSearch) {
-          dispatch(closeGptSearch());
-          navigate("/browse");
-
+  const handleSpotlightClick = () => {
+      if (showSpotlight) {
+          dispatch(closeSpotlight());
           return;
       }
-      dispatch(openGptSearch());
-  }
+
+      dispatch(openSpotlight());
+  };
+
+  useEffect(() => {
+      const handleKeyDown = (e) => {
+          if (e.ctrlKey && e.key.toLowerCase() === "k") {
+              e.preventDefault();
+              handleSpotlightClick();
+          }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+          window.removeEventListener("keydown", handleKeyDown);
+      };
+  }, [showSpotlight]);
 
   const handleWatchlistClick = () => {
       setShowProfileMenu(false);
 
-      dispatch(closeGptSearch());
+      dispatch(closeSpotlight())
 
       navigate("/watchlist");
   };
@@ -70,7 +82,7 @@ const Header = () => {
                   <NavLink
                       to="/browse"
                       className={navLinkClass}
-                      onClick={() => dispatch(closeGptSearch())}
+                      onClick={() => dispatch(closeSpotlight())}
                   >
                       Home
                   </NavLink>
@@ -78,7 +90,7 @@ const Header = () => {
                   <NavLink
                       to="/movies"
                       className={navLinkClass}
-                      onClick={() => dispatch(closeGptSearch())}
+                      onClick={() => dispatch(closeSpotlight())}
                   >
                       Movies
                   </NavLink>
@@ -86,7 +98,7 @@ const Header = () => {
                   <NavLink
                       to="/tvshows"
                       className={navLinkClass}
-                      onClick={() => dispatch(closeGptSearch())}
+                      onClick={() => dispatch(closeSpotlight())}
                   >
                       TV Shows
                   </NavLink>
@@ -94,7 +106,7 @@ const Header = () => {
                   <NavLink
                       to="/watchlist"
                       className={navLinkClass}
-                      onClick={() => dispatch(closeGptSearch())}
+                      onClick={() => dispatch(closeSpotlight())}
                   >
                       Watchlist
                   </NavLink>
@@ -104,19 +116,23 @@ const Header = () => {
 
         {/* Right side buttons baad me */}
         {user && <div className="flex items-center justify-between gap-5">
-          <button className="w-48 h-12 relative group flex items-center justify-center rounded-md mr-10 p-[2px] bg-gradient-to-r from-purple-800 via-red-600 to-blue-800 cursor-pointer"
-            onClick={handleGptSearchClick}>
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-800 via-red-600 to-blue-800 blur-md opacity-0 transition-all duration-300 group-hover:opacity-60 -z-10">
-            </div>
-            <div className="relative w-full h-full flex items-center justify-center gap-2 rounded-md bg-black">
-              <Sparkles
-                size={22}
-                className="text-violet-500 fill-violet-500"
+          <button
+            onClick={handleSpotlightClick}
+            className="group flex items-center gap-2 h-10 px-3 rounded-xl bg-zinc-900/30 border border-white/10 text-zinc-400 hover:text-white hover:bg-zinc-900 transition-all duration-200 cursor-pointer"
+          >
+              <Search
+                size={20}
+                strokeWidth={2}
+                className="text-zinc-400 group-hover:text-white"
               />
-              <span className="text-white font-medium text-xl">
-                {showGptSearch ? "Homepage" : "GPT Search"}
+
+              <span className="text-sm">
+                Search
               </span>
-            </div>
+
+              <kbd className="ml-1 text-[11px] text-zinc-500 bg-zinc-800 border border-white/10 rounded-md px-1.5 py-0.5">
+                Ctrl K
+              </kbd>
           </button>
           <div className="relative">
             <button className="flex items-center gap-3 cursor-pointer" onClick={()=>setShowProfileMenu(prev=>!prev)}>
@@ -151,6 +167,8 @@ const Header = () => {
             Sign Out</button>
         </div>}
       </div>
+
+      {showSpotlight && <SpotlightSearch />}
     </div>
   );
 };

@@ -1,9 +1,8 @@
-import { useSelector } from "react-redux"
+
 import useNowPlayingMovies from "../hooks/useNowPlayingMovies"
 import usePopularMovies from "../hooks/usePopularMovies"
 import useTopRatedMovies from "../hooks/useTopRatedMovies"
 import useUpcomingMovies from "../hooks/useUpcomingMovies"
-import GptSearch from "./GptSearch"
 import MainContainer from "./MainContainer"
 import useMovieGenres from "../hooks/useMovieGenres"
 import useWatchlist from "../hooks/useWatchlist"
@@ -16,8 +15,6 @@ import useTrendingMedia from "../hooks/useTrendingMedia"
 import HomeContainer from "./HomeContainer"
 
 const Browse=()=>{
-
-    const showGptSearch = useSelector(store=>store.gpt.showGptSearch)
     //Fetch Data from TMDB API and update store
     useTrendingMedia()
 
@@ -37,14 +34,8 @@ const Browse=()=>{
     console.log("browse page is herer")
     return(
         <div className="bg-black">
-            {
-                showGptSearch ? (<GptSearch />) : (
-                    <>
-                        <MainContainer />
-                        <HomeContainer />
-                    </>
-                )
-            }
+            <MainContainer />
+            <HomeContainer />
         </div>
     )
 }
