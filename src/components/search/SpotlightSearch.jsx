@@ -1,21 +1,31 @@
 import { useEffect, useRef, useState } from "react";
 import {Search,Sparkles,History,TrendingUp,X,ArrowUp,ArrowDown,CornerDownLeft, SearchIcon, XCircle,} from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { closeSpotlight } from "../../utils/spotlightSlice";
 import useSearchMedia from "../../hooks/useSearchMedia";
 import SearchResultSkeleton from "./SearchResultSkeleton";
 import SearchResultItem from "./SearchResultItem";
 import { useNavigate } from "react-router";
+import geminiAi from "../../utils/gemini";
+import { addGptMovieResult,clearGptMovieResult } from "../../utils/gptSlice";
+import { API_OPTIONS } from "../../utils/constants";
 
 const SpotlightSearch = () => {
 
     const [activeTab, setActiveTab] = useState("search");
-    const [searchQuery, setSearchQuery] = useState("");
+
+    const [query, setQuery] = useState("");
 
     const [selectedIndex, setSelectedIndex] = useState(-1);
-    const { results, loading, error } = useSearchMedia(searchQuery);
+    const [aiLoading, setAiLoading] = useState(false);
+    const [aiError, setAiError] = useState(null);
+    
+    const { results, loading, error } = useSearchMedia(activeTab === "search" ? query : "");
 
     const navigate = useNavigate()
+    
+    const dispatch = useDispatch()
+    const gptMovies = useSelector((store) => store.gpt.gptMovies);
 
     //only getting the tv and movie media type not the people one
     const filterMedia=results.filter((res)=>{
@@ -43,15 +53,41 @@ const SpotlightSearch = () => {
 
     const allResults = [...movies, ...tvShows];
 
+    const normalizedAiResults = (gptMovies || [])
+    .filter(Boolean)
+    .map((res) => {
+        return {
+        id: res.id,
+        title: res.media_type === "movie" ? res.title : res.name,
+        year:
+            res.media_type === "movie"
+            ? res.release_date?.split("-")[0]
+            : res.first_air_date?.split("-")[0],
+        posterPath: res.poster_path,
+        mediaType: res.media_type,
+        rating: res.vote_average,
+        };
+    });
 
+    const aiMovies = normalizedAiResults.filter(
+        (media) => media.mediaType === "movie"
+    );
+
+    const aiTvShows = normalizedAiResults.filter(
+        (media) => media.mediaType === "tv"
+    );
+
+    const aiAllResults = [...aiMovies, ...aiTvShows];
 
     console.log(results)
 
     const spotlightRef = useRef(null);
 
-    const dispatch = useDispatch()
+
+    
     const inputRef = useRef(null);
     const resultRefs = useRef([])
+    const lastAiQuery = useRef("");
 
     const [recentSearches,setRecentSearches] = useState(()=>{
         const savedSearches = localStorage.getItem("recentSearches");
@@ -63,6 +99,81 @@ const SpotlightSearch = () => {
         return [];
     });
 
+    const searchMediaTMDB = async ({ title, type }) => {
+        const data = await fetch(
+            "https://api.themoviedb.org/3/search/multi?query=" +
+            encodeURIComponent(title) +
+            "&include_adult=false&language=en-US&page=1",
+            API_OPTIONS
+        );
+
+        const jsonData = await data.json();
+
+        return jsonData.results?.find(
+            (item) =>
+            item.media_type === type
+        );
+    };
+
+    const handleAiSearch = async () => {
+        try {
+            if (!query.trim()) return;
+            
+            setAiError(null);
+            dispatch(clearGptMovieResult());
+            setAiLoading(true);
+
+            const prompt = `
+                Act as an expert movie and TV show recommendation system.
+
+                Recommend exactly 6 movies or TV shows for the following request:
+
+                "${query}"
+
+                Return the result as a JSON array.
+
+                Each item must contain:
+                - title: the movie or TV show title
+                - type: either "movie" or "tv"
+
+                Example:
+                [
+                    { "title": "Interstellar", "type": "movie" },
+                    { "title": "Dark", "type": "tv" }
+                ]
+
+                Return ONLY valid JSON.
+                `;
+            const response = await geminiAi.models.generateContent({
+            model: "gemini-3.5-flash",
+            contents: prompt,
+            });
+
+            const geminiMovies = JSON.parse(response.text);
+console.log("Gemini Results:", geminiMovies);
+            const promiseArray = geminiMovies.map((movie) =>
+            searchMediaTMDB(movie)
+            );
+
+            const tmdbResults = (await Promise.all(promiseArray)).filter(Boolean);
+console.log("TMDB Results:", tmdbResults);
+
+            if (tmdbResults.length === 0) {
+                setAiError("Sorry, we couldn't find any matching titles.");
+                return;
+            }
+
+            lastAiQuery.current = query.trim();
+            dispatch(addGptMovieResult({geminiMovies,tmdbResults,}));
+
+        } catch (error) {
+            console.error("AI ERROR:", error);
+
+            setAiError(error?.message || "Something went wrong. Please try again.");
+        } finally {
+            setAiLoading(false);
+        }
+    };
     const saveRecentSearch = (query) => {
         const trimmedQuery = query.trim();
         if (!trimmedQuery) return;
@@ -159,16 +270,35 @@ const SpotlightSearch = () => {
     useEffect(() => {
         const handleKeyDown = (e) => {
 
+            const currentResults =
+                activeTab === "ai" ? aiAllResults : allResults;
+
+
             if (e.key === "Enter") {
                 e.preventDefault();
 
+                const currentQuery = query.trim();
+
+                // AI tab + query changed / no results = new AI search
+                if (
+                    activeTab === "ai" &&
+                    (
+                        currentQuery !== lastAiQuery.current ||
+                        currentResults.length === 0
+                    )
+                ) {
+                    handleAiSearch();
+                    return;
+                }
+
+                // Nothing selected
                 if (selectedIndex === -1) return;
 
-                const selectedMedia = allResults[selectedIndex];
+                const selectedMedia = currentResults[selectedIndex];
 
                 if (!selectedMedia) return;
-                
-                saveRecentSearch(searchQuery);
+
+                saveRecentSearch(query);
 
                 dispatch(closeSpotlight());
 
@@ -178,11 +308,15 @@ const SpotlightSearch = () => {
                     navigate(`/tv/${selectedMedia.id}`);
                 }
             }
+
+
             if (e.key === "ArrowDown") {
                 e.preventDefault();
 
+                if (currentResults.length === 0) return;
+
                 setSelectedIndex((prev) => {
-                    if (prev < allResults.length - 1) {
+                    if (prev < currentResults.length - 1) {
                         return prev + 1;
                     }
 
@@ -190,15 +324,18 @@ const SpotlightSearch = () => {
                 });
             }
 
+
             if (e.key === "ArrowUp") {
                 e.preventDefault();
+
+                if (currentResults.length === 0) return;
 
                 setSelectedIndex((prev) => {
                     if (prev > 0) {
                         return prev - 1;
                     }
 
-                    return allResults.length - 1;
+                    return currentResults.length - 1;
                 });
             }
         };
@@ -208,7 +345,8 @@ const SpotlightSearch = () => {
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [allResults.length,selectedIndex, navigate, dispatch]);
+
+    }, [allResults.length,aiAllResults.length,selectedIndex,navigate,dispatch,activeTab,query]);
 
     useEffect(() => {
         if (selectedIndex >= 0) {
@@ -219,9 +357,7 @@ const SpotlightSearch = () => {
         }
     }, [selectedIndex]);
     
-    useEffect(() => {
-        setSelectedIndex(-1);
-    }, [searchQuery]);
+
 
     return (
         <div className="fixed inset-0 z-[100] h-full">
@@ -270,10 +406,12 @@ const SpotlightSearch = () => {
 
                             <input
                                 ref={inputRef}
-                                value={searchQuery}
-                                onChange={(e) =>
-                                    setSearchQuery(e.target.value)
-                                }
+                                value={query}
+                                onChange={(e) =>{
+                                    setQuery(e.target.value)
+                                    setSelectedIndex(-1)
+                                    resultRefs.current = []
+                                }}
                                 placeholder="Search movies, TV shows, people..."
                                 className="
                                     flex-1
@@ -285,9 +423,9 @@ const SpotlightSearch = () => {
                                 "
                             />
 
-                            { searchQuery && (
+                            { query && (
                                 <button
-                                    onClick={() => setSearchQuery("")} 
+                                    onClick={() => setQuery("")} 
                                     className="flex items-center gap-1 cursor-pointer">
                                     <X size={26} color="white"/>
                                 </button>
@@ -306,7 +444,11 @@ const SpotlightSearch = () => {
                         {/* Search Tab */}
 
                         <button
-                            onClick={() => setActiveTab("search")}
+                            onClick={() => {
+                                setActiveTab("search");
+                                setSelectedIndex(-1);
+                                resultRefs.current = [];
+                            }}
                             className={` flex-1 flex items-center justify-center gap-3 py-3 text-md transition border-b-2 cursor-pointer
                                 ${
                                     activeTab === "search"
@@ -331,7 +473,11 @@ const SpotlightSearch = () => {
                         {/* Ask AI Tab */}
 
                         <button
-                            onClick={() => setActiveTab("ai")}
+                            onClick={() => {
+                                setActiveTab("ai");
+                                setSelectedIndex(-1);
+                                resultRefs.current = [];
+                            }}
                             className={`flex-1 flex items-center justify-center gap-3 py-3 text-md transition border-b-2 cursor-pointer
                                 ${
                                     activeTab === "ai"
@@ -355,7 +501,7 @@ const SpotlightSearch = () => {
                     <div className="border-t border-white/10">
 
                         {activeTab === "search" ? (
-                            searchQuery ? (loading ? (<SearchResultSkeleton />) : (
+                            query ? (loading ? (<SearchResultSkeleton />) : (
                                 <div>
                                     {
                                         error ? (
@@ -386,7 +532,7 @@ const SpotlightSearch = () => {
                                                 </h3>
 
                                                 <p className="text-sm text-white/40 mt-2">
-                                                    We couldn't find anything for "{searchQuery}"
+                                                    We couldn't find anything for "{query}"
                                                 </p>
                                             </div>
                                         ) : (
@@ -399,7 +545,7 @@ const SpotlightSearch = () => {
                                                             key={`movie-${movie.id}`}
                                                             media={movie}
                                                             isSelected={selectedIndex === index}
-                                                            onSelect={() => saveRecentSearch(searchQuery)}
+                                                            onSelect={() => saveRecentSearch(query)}
                                                             resultRef = {(el)=>{
                                                                 resultRefs.current[index] = el;
                                                             }}
@@ -416,7 +562,7 @@ const SpotlightSearch = () => {
                                                             key={`tv-${show.id}`}
                                                             media={show}
                                                             isSelected={selectedIndex === movies.length + index}
-                                                            onSelect={() => saveRecentSearch(searchQuery)}
+                                                            onSelect={() => saveRecentSearch(query)}
                                                             resultRef={(el) => {
                                                                 resultRefs.current[movies.length + index] = el;
                                                             }}
@@ -473,7 +619,7 @@ const SpotlightSearch = () => {
 
                                                         <button
                                                             onClick={() =>
-                                                                setSearchQuery(search)
+                                                                setQuery(search)
                                                             }
                                                             className=" flex items-center gap-4  text-white/70  hover:text-white transition cursor-pointer text-left
                                                             "
@@ -539,7 +685,7 @@ const SpotlightSearch = () => {
                                                 <button
                                                     key={search}
                                                     onClick={() =>
-                                                        setSearchQuery(search)
+                                                        setQuery(search)
                                                     }
                                                     className=" flex items-center gap-4  text-white/70  hover:text-white transition cursor-pointer
                                                     "
@@ -568,23 +714,90 @@ const SpotlightSearch = () => {
 
                             /* Ask AI */
 
-                            <div className="min-h-[350px] flex flex-col items-center justify-center text-center px-6">
+                            <div className="max-h-[60vh] overflow-y-auto custom-scrollbar px-4 py-5">
 
-                                <Sparkles
-                                    size={40}
-                                    className="text-purple-400 mb-4"
-                                />
+                            {aiLoading ? (
+                                <SearchResultSkeleton />
+                            ): aiError ? (
+                                <div className="min-h-[250px] flex flex-col items-center justify-center text-center">
+                                    <X
+                                        size={40}
+                                        className="text-red-400/70 mb-4"
+                                    />
 
-                                <h3 className="text-xl font-semibold">
-                                    Ask AI
-                                </h3>
+                                    <h3 className="text-lg font-medium text-white">
+                                        Something went wrong
+                                    </h3>
 
-                                <p className="text-white/50 mt-2 max-w-md">
-                                    Ask anything about movies and TV shows.
-                                    AI-powered recommendations are coming here.
-                                </p>
+                                    <p className="text-sm text-white/40 mt-2">
+                                        {aiError}
+                                    </p>
+                                </div>
+                            ) :
+                            normalizedAiResults.length === 0 ? (
+                                <div className="min-h-[250px] flex flex-col items-center justify-center text-center">
+                                    <Sparkles
+                                        size={40}
+                                        className="text-purple-400 mb-4"
+                                    />
 
-                            </div>
+                                    <h3 className="text-xl font-semibold text-white">
+                                        Ask AI
+                                    </h3>
+
+                                    <p className="text-white/50 mt-2 max-w-md">
+                                        Type what you are looking for and press Enter.
+                                    </p>
+                                </div>
+                            ) : (
+                                <div>
+                                    <h3 className="px-4 mb-3 text-sm font-semibold text-white/50 uppercase">
+                                        AI Recommendations
+                                    </h3>
+
+                                    {aiMovies.length > 0 && (
+                                        <div>
+                                            <h3 className="px-4 mb-3 text-sm font-semibold text-white/50 uppercase">
+                                                Movies
+                                            </h3>
+
+                                            {aiMovies.map((movie, index) => (
+                                                <SearchResultItem
+                                                    key={`ai-movie-${movie.id}`}
+                                                    media={movie}
+                                                    isSelected={selectedIndex === index}
+                                                    onSelect={() => saveRecentSearch(query)}
+                                                    resultRef={(el) => {
+                                                        resultRefs.current[index] = el;
+                                                    }}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {aiTvShows.length > 0 && (
+                                        <div className="mt-5">
+                                            <h3 className="px-4 mb-3 text-sm font-semibold text-white/50 uppercase">
+                                                TV Shows
+                                            </h3>
+
+                                            {aiTvShows.map((show, index) => (
+                                                <SearchResultItem
+                                                    key={`ai-tv-${show.id}`}
+                                                    media={show}
+                                                    isSelected={selectedIndex === aiMovies.length + index}
+                                                    onSelect={() => saveRecentSearch(query)}
+                                                    resultRef={(el) => {
+                                                        resultRefs.current[aiMovies.length + index] = el;
+                                                    }}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                        </div>
 
                         )}
 

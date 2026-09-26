@@ -10,15 +10,6 @@ const GptSearchBar = () => {
     const searchText = useRef(null)
     const dispatch = useDispatch()
 
-    //search movie/tv in TMDB
-    // const searchMovieTMDB = async (movie) => {
-    //     const data = await fetch("https://api.themoviedb.org/3/search/movie?query="+ movie +
-    //         "&include_adult=false&language=en-US&page=1",API_OPTIONS)
-        
-    //     const jsonData = await data.json()
-
-    //     return jsonData.results?.[0]
-    // }
     const searchMediaTMDB = async (media) => {
         const data = await fetch(
             "https://api.themoviedb.org/3/search/multi?query=" +
