@@ -143,7 +143,7 @@ console.log("Current Season:", currentSeason);
 
 
     return (
-        <section className="px-6 py-8">
+        <section className="py-8">
 
             <div className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden">
 
@@ -160,7 +160,7 @@ console.log("Current Season:", currentSeason);
 
 
                 {/* Season Content */}
-                <div className="p-6 space-y-3">
+                <div className=" space-y-3">
 
                     {showAllSeasons ? (
 
