@@ -5,7 +5,7 @@ const MovieInfo = ({ movie }) => {
     if (!movie) return null;
 
     return (
-        <section className="px-6 py-8">
+        <section className="py-8">
 
             <h2 className="text-2xl font-semibold text-yellow-100 mb-6">
                 Movie Details

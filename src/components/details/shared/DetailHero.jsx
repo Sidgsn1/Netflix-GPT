@@ -162,7 +162,7 @@ const DetailHero = ({
 
                             <button
                                 onClick={onWatchlist}
-                                className="flex  gap-2 px-6 py-3 rounded-xl bg-white/10 border border-white/20  text-white font-semibold transition-transform hover:scale-105 cursor-pointer"
+                                className="flex items-center text-md  gap-2 px-3 lg:px-6 py-3 rounded-xl bg-white/10 border border-white/20  text-white font-semibold transition-transform hover:scale-105 cursor-pointer"
                             >
                                 <Plus color="#ffffff" />
                                 {isAdded ? "Remove from Watchlist" : "Add to Watchlist"}
@@ -170,7 +170,7 @@ const DetailHero = ({
 
                             <button
                                 onClick={onTrailer}
-                                className="px-6 py-3 rounded-xl bg-white/10 border border-white/20 text-white cursor-pointer font-semibold backdrop-blur-md hover:bg-white/20 transition-all"
+                                className="px-3 lg:px-6 py-3 text-md rounded-xl bg-white/10 border border-white/20 text-white cursor-pointer font-semibold backdrop-blur-md hover:bg-white/20 transition-all"
                             >
                                 Watch Trailer
                             </button>

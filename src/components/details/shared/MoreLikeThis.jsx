@@ -21,7 +21,7 @@ const MoreLikeThis = ({ media }) => {
     };
 
     return (
-        <section className="px-6 py-8">
+        <section className="py-8">
 
             {/* Heading + Arrows */}
 

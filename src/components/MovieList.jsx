@@ -27,7 +27,7 @@ const MovieList = ({ title, media, type }) => {
         <div className="bg-transparent">
 
             {/* Section Title */}
-            <h1 className="text-md md:text-xl lg:text-2xl font-semibold tracking-tighter py-5">
+            <h1 className="text-lg md:text-2xl font-semibold tracking-tighter py-5">
                 {title}
             </h1>
 
@@ -39,13 +39,13 @@ const MovieList = ({ title, media, type }) => {
                     className="flex overflow-x-auto no-scrollbar scroll-smooth"
                 >
 
-                    <div className="flex gap-4">
+                    <div className="flex gap-2 lg:gap-4">
 
                         {media.map((item) => (
 
                             <div
                                 key={item.id}
-                                className="w-52 shrink-0"
+                                className="w-32 lg:w-52 shrink-0"
                             >
 
                                 <GptMovieCard
@@ -78,26 +78,7 @@ const MovieList = ({ title, media, type }) => {
 
                 <button
                     onClick={() => scroll("left")}
-                    className="
-                        absolute
-                        left-2
-                        top-1/2
-                        -translate-y-1/2
-                        z-10
-                        w-10
-                        h-10
-                        rounded-full
-                        bg-black/70
-                        backdrop-blur-md
-                        border
-                        border-white/10
-                        text-white
-                        flex
-                        items-center
-                        justify-center
-                        hover:bg-white/20
-                        transition
-                        cursor-pointer
+                    className=" absolute left-2 top-2/5 lg:top-1/2 -translate-y-1/2 z-10 w-8 h-8 lg:w-10 lg:h-10 rounded-full  bg-black/70 backdrop-blur-md border  border-white/10  text-white flex items-center justify-center  hover:bg-white/20 transition cursor-pointer
                     "
                 >
                     <ChevronLeft size={22} />
@@ -108,26 +89,7 @@ const MovieList = ({ title, media, type }) => {
 
                 <button
                     onClick={() => scroll("right")}
-                    className="
-                        absolute
-                        right-2
-                        top-1/2
-                        -translate-y-1/2
-                        z-10
-                        w-10
-                        h-10
-                        rounded-full
-                        bg-black/70
-                        backdrop-blur-md
-                        border
-                        border-white/10
-                        text-white
-                        flex
-                        items-center
-                        justify-center
-                        hover:bg-white/20
-                        transition
-                        cursor-pointer
+                    className=" absolute right-2 top-2/5 lg:top-1/2 -translate-y-1/2 z-10 w-8 h-8 lg:w-10 lg:h-10 rounded-full  bg-black/70 backdrop-blur-md border  border-white/10  text-white flex items-center justify-center  hover:bg-white/20 transition cursor-pointer
                     "
                 >
                     <ChevronRight size={22} />

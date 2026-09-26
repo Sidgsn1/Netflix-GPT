@@ -68,7 +68,7 @@ const GptMovieCard = ({title,mediaData,genres,type}) => {
                     </div>
                     {isAdded && <div className="absolute top-2 left-2 flex items-center gap-2 transition-all duration-200 bg-black/60 px-3 py-2 rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                         <Heart size={18} color="red" fill="red"/>
-                        <span className="text-sm tracking-wider text-white">In Watchlist</span>
+                        <span className="hidden lg:inline text-sm tracking-wider text-white">In Watchlist</span>
                     </div>}
                     <button className="w-full absolute bottom-3 flex justify-center cursor-pointer
                         opacity-0
@@ -86,7 +86,7 @@ const GptMovieCard = ({title,mediaData,genres,type}) => {
                             }
                         }}
                         >
-                        <div className="relative text-white rounded-xl p-[1.5px] bg-gradient-to-r from-[#7C3AED] via-[#A855F7] to-[#FBBF24]">
+                        <div className="hidden lg:block relative text-white rounded-xl p-[1.5px] bg-gradient-to-r from-[#7C3AED] via-[#A855F7] to-[#FBBF24]">
                             {isAdded ? (<div className="bg-black rounded-xl flex gap-5 px-4 py-3 text-sm">
                                 <Trash2 size={20} color="red"/>
                                 <span className="font-semibold tracking-wider text-red-500">Remove</span>
@@ -100,14 +100,14 @@ const GptMovieCard = ({title,mediaData,genres,type}) => {
                 </div>
                 
                 <div className="flex flex-col justify-between p-2 space-y-2 bg-black">
-                    <div className="flex items-center justify-between">
+                    <div className="lg:flex items-center justify-between">
                         <h1 className="text-md text-yellow-100 truncate flex-1">{title}</h1>
                         <div className="flex items-center justify-center border-[1px] border-amber-100/20 text-yellow-100 rounded-md p-1 px-2 gap-2 text-sm shrink-0">
-                            <h1 className="tracking-wider leading-none text-sm">{vote_average ? vote_average.toFixed(1):"N/A"}</h1>
+                            <h1 className="tracking-wider leading-none text-xs lg:text-sm">{vote_average ? vote_average.toFixed(1):"N/A"}</h1>
                             <Star size={13} fill="gold" color="gold"/>
                         </div>
                     </div>
-                    <div className="flex gap-2 text-amber-100/40 items-center text-sm">
+                    <div className="hidden lg:flex gap-2 text-amber-100/40 items-center text-sm">
                         <h1>{(release_date || first_air_date)? (release_date || first_air_date).split("-")[0]: "-"}</h1>
                         <div className="w-1 h-1 bg-amber-100/40 rounded-full"></div>
                         <h1 className="truncate">{movieGenres || "unknown"}</h1>

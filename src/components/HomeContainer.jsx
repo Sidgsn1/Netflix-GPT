@@ -10,7 +10,7 @@ const HomeContainer = () => {
 
   console.log("secondary,",movies.nowPlayingMovies)
   return (
-    <div className=" text-white -mt-40 relative z-30 px-4 py-5 sm:px-6 md:px-10 lg:px-12">
+    <div className=" text-white -mt-40 relative z-30 px-4 py-5 sm:px-6 md:px-10 lg:px-12 pb-20">
         <MovieList title={"Trending Today!"} media={movies.trendingToday} type={"mixed"} />
         <MovieList title={"Treding This Week!"} media={movies.trendingWeek} type={"mixed"} />
         <MovieList title={"Top Rated Movies"} media={movies.topRatedMovies} type={"movie"} />

@@ -25,7 +25,7 @@ const CastSection = ({ cast }) => {
     };
 
     return (
-        <section className="px-6 py-8">
+        <section className="py-8">
 
             <div className="flex items-center justify-between">
 

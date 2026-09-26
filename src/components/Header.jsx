@@ -3,13 +3,9 @@ import { auth } from "../utils/firebase";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-// import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
-// import { addUser, removeUser } from "../utils/userSlice"
 import { LOGO } from "../utils/constants";
 import { LogOut,ChevronDown,Sparkles, Heart,Search } from "lucide-react";
-// import { toggleGptSearchView } from "../utils/gptSlice";
-// import { openGptSearch, closeGptSearch } from "../utils/gptSlice";
 import {openSpotlight,closeSpotlight} from "../utils/spotlightSlice";
 import SpotlightSearch from "./search/SpotlightSearch";
 
@@ -77,7 +73,7 @@ const Header = () => {
         <img className="w-28 sm:w-32 md:w-36 lg:w-40" src={LOGO} alt="netflix-logo"></img>
 
             {user && (
-              <nav className="flex items-center gap-8">
+              <nav className="hidden lg:flex items-center gap-8">
 
                   <NavLink
                       to="/browse"
@@ -115,10 +111,10 @@ const Header = () => {
           )}
 
         {/* Right side buttons baad me */}
-        {user && <div className="flex items-center justify-between gap-5">
+        {user && <div className="flex items-center gap-2 lg:gap-5">
           <button
             onClick={handleSpotlightClick}
-            className="group flex items-center gap-2 h-10 px-3 rounded-xl bg-zinc-900/30 border border-white/10 text-zinc-400 hover:text-white hover:bg-zinc-900 transition-all duration-200 cursor-pointer"
+            className="group flex items-center justify-center gap-2 h-10 w-10 md:w-auto md:px-3 rounded-xl bg-zinc-900/30 border border-white/10 text-zinc-400 hover:text-white hover:bg-zinc-900 transition-all duration-200 cursor-pointer"
           >
               <Search
                 size={20}
@@ -126,23 +122,23 @@ const Header = () => {
                 className="text-zinc-400 group-hover:text-white"
               />
 
-              <span className="text-sm">
+              <span className="hidden md:block text-sm">
                 Search
               </span>
 
-              <kbd className="ml-1 text-[11px] text-zinc-500 bg-zinc-800 border border-white/10 rounded-md px-1.5 py-0.5">
+              <kbd className="hidden md:block ml-1 text-[11px] text-zinc-500 bg-zinc-800 border border-white/10 rounded-md px-1.5 py-0.5">
                 Ctrl K
               </kbd>
           </button>
           <div className="relative">
             <button className="flex items-center gap-3 cursor-pointer" onClick={()=>setShowProfileMenu(prev=>!prev)}>
               <div className="border-2 border-white/20 rounded-md p-1">
-                <img className="w-12 rounded-md" src={user?.photoURL} alt="user-profile"></img>
+                <img className="w-10 lg:w-12 rounded-md" src={user?.photoURL} alt="user-profile"></img>
               </div>
               <ChevronDown  strokeWidth={1.5} color="white" className={`transition-transform duration-300 ${showProfileMenu ? "rotate-180":""}`}/>
             </button>
             {/* menu */}
-            {showProfileMenu && <div className="absolute right-0 top-20 w-70 bg-zinc-900 border border-white/25 rounded-2xl text-white px-6">
+            {showProfileMenu && <div className="absolute right-0 top-20 w-60 lg:w-70 bg-zinc-900 border border-white/25 rounded-2xl text-white px-6">
                 <div className="flex gap-5 py-6">
                   <img className="w-12 rounded-md" src={user?.photoURL} alt="user-profile"></img>
                   <div>
@@ -150,19 +146,23 @@ const Header = () => {
                     <h6 className="text-gray-400 text-sm">{user?.email}</h6>
                   </div>
                 </div>
-                <button className="w-full border-amber-50/25 border-t-1 py-6 " onClick={handleWatchlistClick}>
+                <button className="w-full border-amber-50/25 border-t border-b lg:border-b-0 py-6 " onClick={handleWatchlistClick}>
                   <div className="flex items-center justify-between">
                     <div className="flex gap-5">
-                      <Heart fill="red" color="red"/>
-                      <h1 className="font-light">My Watchlist</h1>
+                      <Heart fill="red" size={20} color="red"/>
+                      <h1 className="text-sm font-light lg:text-md">My Watchlist</h1>
                     </div>
                     <div className="px-3 py-1 rounded-xl bg-zinc-800 tracking-wide flex items-center justify-center text-sm font-light">{watchlistMovies.length}</div>
                   </div>
                 </button>
+                <button className="lg:hidden cursor-pointer text-white py-6  border-white flex gap-2 text-sm font-semibold" onClick={handleSignOut}>
+                  <LogOut color="red" size={20}/>
+                  Sign Out
+                </button>
               </div>
             }
           </div>
-          <button className="cursor-pointer text-white py-4 px-4 border-white flex gap-2 font-semibold" onClick={handleSignOut}>
+          <button className="hidden lg:flex cursor-pointer text-white py-4 px-4 border-white flex gap-2 font-semibold" onClick={handleSignOut}>
             <LogOut color="red"/>
             Sign Out</button>
         </div>}
