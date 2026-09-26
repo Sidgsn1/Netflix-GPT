@@ -160,7 +160,7 @@ console.log("Current Season:", currentSeason);
 
 
                 {/* Season Content */}
-                <div className=" space-y-3">
+                <div className="p-2 space-y-3">
 
                     {showAllSeasons ? (
 

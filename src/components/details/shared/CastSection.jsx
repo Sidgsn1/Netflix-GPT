@@ -29,7 +29,7 @@ const CastSection = ({ cast }) => {
 
             <div className="flex items-center justify-between">
 
-                <h2 className="text-2xl font-semibold text-yellow-100">
+                <h2 className="text-xl font-semibold text-yellow-100">
                     Cast & Crew
                 </h2>
 
@@ -56,7 +56,7 @@ const CastSection = ({ cast }) => {
 
             <div
                 ref={castContainerRef}
-                className="flex gap-5 mt-6 overflow-x-auto pb-4 no-scrollbar"
+                className="flex lg:gap-5 mt-6 overflow-x-auto pb-4 no-scrollbar"
             >
 
                 {cast.map((person) => (
@@ -66,7 +66,7 @@ const CastSection = ({ cast }) => {
                         className="group shrink-0 w-32"
                     >
 
-                        <div className="w-32 h-40 rounded-xl overflow-hidden bg-white/5 border border-white/10">
+                        <div className="w-28 h-32 lg:w-32 lg:h-40 rounded-xl overflow-hidden bg-white/5 border border-white/10">
 
                             <img
                                 src={

@@ -27,7 +27,7 @@ const MoreLikeThis = ({ media }) => {
 
             <div className="flex items-center justify-between mb-6">
 
-                <h2 className="text-2xl font-semibold text-yellow-100">
+                <h2 className="text-xl font-semibold text-yellow-100">
                     More Like This
                 </h2>
 
@@ -35,14 +35,14 @@ const MoreLikeThis = ({ media }) => {
 
                     <button
                         onClick={() => scrollMedia("left")}
-                        className="w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition cursor-pointer"
+                        className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition cursor-pointer"
                     >
                         <ChevronLeft size={20} />
                     </button>
 
                     <button
                         onClick={() => scrollMedia("right")}
-                        className="w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition cursor-pointer"
+                        className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition cursor-pointer"
                     >
                         <ChevronRight size={20} />
                     </button>
@@ -66,7 +66,7 @@ const MoreLikeThis = ({ media }) => {
                     return (
                         <div
                             key={item.id}
-                            className="group cursor-pointer shrink-0 w-44"
+                            className="group cursor-pointer shrink-0 w-32 lg:w-44"
                             onClick={() => navigate(`/movie/${item.id}`)}
                         >
 

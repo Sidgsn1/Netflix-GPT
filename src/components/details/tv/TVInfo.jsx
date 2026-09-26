@@ -13,7 +13,7 @@ const TVInfo = ({ tv }) => {
     return (
         <section className="py-8">
 
-            <h2 className="text-2xl font-semibold text-yellow-100 mb-6">
+            <h2 className="text-xl font-semibold text-yellow-100 mb-6">
                 TV Details
             </h2>
 
