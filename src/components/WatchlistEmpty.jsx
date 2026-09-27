@@ -1,14 +1,19 @@
 import { useNavigate } from "react-router"
-import watchlistEmptyBg from "../assets/images/watchlistEmptyBg.png"
+import watchlistEmptyBg from "../assets/images/watchlistEmptyBg1.png"
+import { ChevronRight} from "lucide-react"
 
 const WatchlistEmpty = () => {
     const navigate=useNavigate()
   return (
-    <section className="px-6 lg:px-10 pb-16">
+    <section className="px-4 sm:px-6 lg:px-10 pb-24 md:pb-16">
         <div className="mx-auto max-w-6xld rounded-3xl border border-white/5 p-8 lg-p-12 bg-[#050508]">
-            <div className="grid lg:grid-cols-2 items-center gap-12">
-                <div className="relative flex justify-center p-10 lg:p-14 overflow-hidden">
-                    <img src={watchlistEmptyBg} alt="watchlist empty" className="border-2 scale-150" />
+            <div className="grid lg:grid-cols-2 items-center gap-4 lg:gap-12">
+                    <div className=" relative flex justify-center items-center h-64 sm:h-72 lg:h-auto p-2 sm:p-6 lg:p-14 overflow-hidden ">
+                    <img
+                        src={watchlistEmptyBg}
+                        alt="watchlist empty"
+                        className=" w-full h-full object-cover object-center scale-125 lg:scale-150"
+                    />
                     {/* Left Fade */}
                     <div className="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-[#050508] to-transparent" />
 
@@ -23,19 +28,21 @@ const WatchlistEmpty = () => {
 
                 </div>
 
-                <div className="px-10 lg:px-14 py-12">
-                    <h1 className="text-5xl font-bold text-white leading-tight">Your Watchlist is {" "} <span className="bg-gradient-to-r from-violet-600 via-fuchsia-500 to-orange-400 bg-clip-text text-transparent">Empty</span></h1>
+                <div className="px-2 sm:px-6 lg:px-14 py-2 sm:py-8 lg:py-12 text-center lg:text-left">
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">Your Watchlist is {" "} <span className="bg-gradient-to-r from-violet-600 via-fuchsia-500 to-orange-400 bg-clip-text text-transparent">Empty</span></h1>
 
-                    <p className="mt-6 text-lg text-zinc-400 leading-8 max-w-md">
-                    Save movies and TV shows to watch later.
-                    Build your own collection and never lose
-                    track of what you want to watch next.
-                </p>
+                    <p className="mt-3 sm:mt-5 text-sm sm:text-base lg:text-lg text-zinc-400 leading-6 sm:leading-7 max-w-md mx-auto lg:mx-0">
+                        Save movies and TV shows to watch later.
+                        Build your own collection and never lose
+                        track of what you want to watch next.
+                    </p>
 
-                <button className=" mt-10 rounded-xl p-[2px] bg-gradient-to-r from-violet-600 via-fuchsia-500 to-orange-400 cursor-pointer"
-                    onClick={()=>navigate("/browse")}>
-                    <div className=" flex items-center gap-2 rounded-xl bg-[#111116] px-8 py-4  text-white font-medium">
-                        Browse Movies
+                <button 
+                    className="mt-8 sm:mt-10 mx-auto lg:mx-0 rounded-xl p-[2px] bg-gradient-to-r from-violet-600 via-fuchsia-500 to-orange-400 cursor-pointer"
+                    onClick={() => navigate("/browse")}>
+                    <div className="flex items-center justify-center gap-2 rounded-xl bg-[#111116] px-5 sm:px-8 py-3 sm:py-4 text-sm sm:text-base text-white font-medium">
+                        Explore Movies & Shows
+                        <ChevronRight />
                     </div>
                 </button>
                 </div>

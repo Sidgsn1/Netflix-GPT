@@ -63,7 +63,7 @@ const DetailHero = ({
                         <img
                             src={posterPath}
                             alt={title}
-                            className="w-full aspect-[2/3] object-cover"
+                            className="w-full aspect-[2/3] object-cover object-center"
                         />
 
                     </div>

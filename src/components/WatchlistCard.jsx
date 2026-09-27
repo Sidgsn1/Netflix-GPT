@@ -39,11 +39,9 @@ const WatchlistCard = ({movieData,genres}) => {
                 </div>
                 <button
                     onClick={handleRemoveFromWatchlist}
-                    className="
-                        absolute top-3 right-3 h-8 w-8 rounded-full bg-black backdrop-blur-md flex items-center justify-center border
-                        border-white/10 opacity-0 scale-90 transition-all duration-300 group-hover:opacity-100 cursor-pointer"
+                    className=" absolute top-3 right-3 h-8 w-8 rounded-full  bg-black/70 backdrop-blur-md flex items-center justify-center border border-white/10 opacity-100 scale-100 md:opacity-0 md:scale-90 md:group-hover:opacity-100 md:group-hover:scale-100 transition-all duration-300 cursor-pointer"
                 >
-                    <CircleX size={30} color="white"/>
+                    <CircleX size={22} color="white"/>
                 </button>
                 
                 <div className="flex flex-col justify-between p-2 space-y-2 bg-black">

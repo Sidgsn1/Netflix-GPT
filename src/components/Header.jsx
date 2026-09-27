@@ -70,7 +70,20 @@ const Header = () => {
   return (
     <div className="fixed top-0 left-0  z-50 w-full bg-gradient-to-b from-black/90 to-transparent">
       <div className="flex items-center justify-between px-4 py-5 sm:px-6 md:px-10 lg:px-12">
-        <img className="w-28 sm:w-32 md:w-36 lg:w-40" src={LOGO} alt="netflix-logo"></img>
+        <NavLink
+          to="/browse"
+          onClick={() => {
+            dispatch(closeSpotlight());
+            setShowProfileMenu(false);
+          }}
+        >
+          <img
+            className="w-28 sm:w-32 md:w-36 lg:w-40 cursor-pointer"
+            src={LOGO}
+            alt="cinevo-logo"
+          />
+        </NavLink>
+        {/* <img className="w-28 sm:w-32 md:w-36 lg:w-40" src={LOGO} alt="netflix-logo"></img> */}
 
             {user && (
               <nav className="hidden lg:flex items-center gap-8">
@@ -138,12 +151,12 @@ const Header = () => {
               <ChevronDown  strokeWidth={1.5} color="white" className={`transition-transform duration-300 ${showProfileMenu ? "rotate-180":""}`}/>
             </button>
             {/* menu */}
-            {showProfileMenu && <div className="absolute right-0 top-20 w-60 lg:w-70 bg-zinc-900 border border-white/25 rounded-2xl text-white px-6">
+            {showProfileMenu && <div className="absolute right-0 top-20 w-max min-w-55 max-w-[90vw] bg-zinc-900 border border-white/25 rounded-2xl text-white px-6">
                 <div className="flex gap-5 py-6">
                   <img className="w-12 rounded-md" src={user?.photoURL} alt="user-profile"></img>
                   <div>
-                    <h1>{user?.displayName}</h1>
-                    <h6 className="text-gray-400 text-sm">{user?.email}</h6>
+                    <h1 className="whitespace-nowrap">{user?.displayName}</h1>
+                    <h6 className="text-gray-400 text-sm whitespace-nowrap">{user?.email}</h6>
                   </div>
                 </div>
                 <button className="w-full border-amber-50/25 border-t border-b lg:border-b-0 py-6 " onClick={handleWatchlistClick}>
