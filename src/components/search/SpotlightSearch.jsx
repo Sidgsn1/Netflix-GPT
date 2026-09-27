@@ -372,13 +372,15 @@ console.log("TMDB Results:", tmdbResults);
 
             {/* Spotlight Modal */}
 
-            <div className="relative flex justify-center px-4 pt-16">
+            <div className="relative flex justify-center px-3 sm:px-4 pt-4 sm:pt-8 md:pt-16">
 
                 <div  ref={spotlightRef}  
                     className="
                         w-full max-w-4xl
+                        max-h-[calc(100vh-2rem)]
+                        sm:max-h-[calc(100vh-4rem)]
                         overflow-hidden
-                        rounded-2xl
+                        rounded-xl sm:rounded-2xl
                         border border-white/20
                         bg-zinc-950/95
                         shadow-2xl
@@ -387,21 +389,21 @@ console.log("TMDB Results:", tmdbResults);
 
                     {/* Search Input */}
 
-                    <div className="p-5 pb-3">
+                    <div className="p-3 sm:p-5 pb-2 sm:pb-3">
 
                         <div
                             className="
-                                flex items-center gap-4
+                                flex items-center gap-3 sm:gap-4
                                 rounded-2xl
                                 bg-zinc-800/70
                                 border border-white/5
-                                px-5 py-4
+                                px-3 sm:px-5 py-3 sm:py-4
                             "
                         >
 
                             <Search
-                                size={25}
-                                className="text-white/80 shrink-0"
+                                size={20}
+                                className="sm:w-[25px] sm:h-[25px] text-white/80 shrink-0"
                             />
 
                             <input
@@ -418,7 +420,7 @@ console.log("TMDB Results:", tmdbResults);
                                     bg-transparent
                                     outline-none
                                     text-white
-                                    text-lg
+                                    text-base sm:text-lg
                                     placeholder:text-white/45
                                 "
                             />
@@ -427,7 +429,7 @@ console.log("TMDB Results:", tmdbResults);
                                 <button
                                     onClick={() => setQuery("")} 
                                     className="flex items-center gap-1 cursor-pointer">
-                                    <X size={26} color="white"/>
+                                    <X size={22} className="sm:w-[26px] sm:h-[26px] text-white" />
                                 </button>
                                 )
                             }
@@ -439,7 +441,7 @@ console.log("TMDB Results:", tmdbResults);
 
                     {/* Tabs */}
 
-                    <div className="flex items-center px-8">
+                    <div className="flex items-center px-3 sm:px-8">
 
                         {/* Search Tab */}
 
@@ -449,7 +451,7 @@ console.log("TMDB Results:", tmdbResults);
                                 setSelectedIndex(-1);
                                 resultRefs.current = [];
                             }}
-                            className={` flex-1 flex items-center justify-center gap-3 py-3 text-md transition border-b-2 cursor-pointer
+                            className={` flex-1 flex items-center justify-center gap-2 sm:gap-3 py-3 text-sm sm:text-md transition border-b-2 cursor-pointer
                                 ${
                                     activeTab === "search"
                                         ? "text-purple-400 border-purple-500"
@@ -458,7 +460,7 @@ console.log("TMDB Results:", tmdbResults);
                             `}
                         >
 
-                            <Search size={20} />
+                            <Search size={18} className="sm:w-5 sm:h-5" />
 
                             <span>Search</span>
 
@@ -478,7 +480,7 @@ console.log("TMDB Results:", tmdbResults);
                                 setSelectedIndex(-1);
                                 resultRefs.current = [];
                             }}
-                            className={`flex-1 flex items-center justify-center gap-3 py-3 text-md transition border-b-2 cursor-pointer
+                            className={`flex-1 flex items-center justify-center gap-2 sm:gap-3 py-3 text-sm sm:text-md transition border-b-2 cursor-pointer
                                 ${
                                     activeTab === "ai"
                                         ? "text-purple-400 border-purple-500"
@@ -487,7 +489,7 @@ console.log("TMDB Results:", tmdbResults);
                             `}
                         >
 
-                            <Sparkles size={20} />
+                            <Sparkles size={18} className="sm:w-5 sm:h-5" />
 
                             <span>Ask AI</span>
 
@@ -536,7 +538,7 @@ console.log("TMDB Results:", tmdbResults);
                                                 </p>
                                             </div>
                                         ) : (
-                                        <div className="max-h-[60vh] overflow-y-auto custom-scrollbar px-4 py-5">
+                                        <div className="max-h-[55vh] sm:max-h-[60vh] overflow-y-auto custom-scrollbar px-1 sm:px-4 py-3 sm:py-5">
                                             {movies.length > 0 && (
                                                 <div>
                                                     <h3 className="px-4 mb-3 text-sm font-semibold text-white/50 uppercase">Movies</h3>
@@ -576,11 +578,11 @@ console.log("TMDB Results:", tmdbResults);
                             )) 
                             : (
                                 // Recent and Trending
-                                <div className="grid grid-cols-2">
+                                <div className="grid grid-cols-1 md:grid-cols-2">
 
                                     {/* Recent Searches */}
 
-                                    <div className="px-8 py-7 border-r border-white/10">
+                                    <div className="px-4 sm:px-8 py-5 sm:py-7 border-b md:border-b-0 md:border-r border-white/10">
 
                                         <div className="flex items-center justify-between mb-6">
 
@@ -642,7 +644,7 @@ console.log("TMDB Results:", tmdbResults);
                                                             className="  text-white/40  hover:text-white opacity-0 group-hover:opacity-100 transition cursor-pointer
                                                             "
                                                         >
-                                                            <X size={18} />
+                                                            <X size={18} className="text-white"/>
                                                         </button>
 
                                                     </div>
@@ -662,7 +664,7 @@ console.log("TMDB Results:", tmdbResults);
 
                                     {/* Trending Searches */}
 
-                                    <div className="px-8 py-7">
+                                    <div className="px-4 sm:px-8 py-5 sm:py-7">
 
                                         <div className="flex items-center gap-3 mb-6">
 
@@ -806,10 +808,7 @@ console.log("TMDB Results:", tmdbResults);
 
                     {/* Keyboard Footer */}
 
-                    <div
-                        className=" border-t border-white/10 px-8 py-4 flex flex-wrap items-center justify-center gap-6 text-sm  text-white/50
-                        "
-                    >
+                    <div className="hidden sm:flex border-t border-white/10 px-8 py-4 flex-wrap items-center justify-center gap-6 text-sm text-white/50">
 
                         <div className="flex items-center gap-2">
 

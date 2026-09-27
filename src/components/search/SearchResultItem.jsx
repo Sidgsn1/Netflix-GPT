@@ -12,8 +12,7 @@ const SearchResultItem = ({ media,isSelected,onSelect,resultRef }) => {
         <div
             ref={resultRef}
             className={`
-                flex items-center gap-4
-                px-8 py-3
+                flex items-center gap-3 sm:gap-4 px-3 sm:px-8 py-3
                 rounded-lg
                 hover:bg-white/5
                 cursor-pointer
@@ -35,7 +34,7 @@ const SearchResultItem = ({ media,isSelected,onSelect,resultRef }) => {
                 src={`${IMG_CDN_URL}${posterPath}`}
                 alt={title}
                 className="
-                    h-16 w-12
+                    h-20 w-16 sm:h-16 sm:w-12
                     object-cover
                     rounded-md
                     bg-zinc-800
@@ -50,7 +49,7 @@ const SearchResultItem = ({ media,isSelected,onSelect,resultRef }) => {
                     {title}
                 </h3>
 
-                <div className="flex items-center gap-2 mt-1 text-sm text-white/50">
+                <div className="flex items-center gap-2 mt-1 text-xs sm:text-sm text-white/50">
 
                     <span>{year || "N/A"}</span>
 
